@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using BelDor.API.DependencyInjection;
+using BelDor.API.Middlewares;
 
 namespace BelDor.API
 {
@@ -49,6 +50,8 @@ namespace BelDor.API
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+            app.UseMiddleware(typeof(ErrorHandlingMiddleware));
 
             app.UseEndpoints(endpoints =>
             {

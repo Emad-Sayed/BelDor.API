@@ -1,5 +1,6 @@
 ﻿using Core.Domain.ViewModel;
 using Core.Infrastrcture.Service;
+using Infrastructure.Service.TicketBusinees;
 using Infrastructure.Service.User;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -14,6 +15,7 @@ namespace Infrastructure.DependencyInjection
         {
             services.AddTransient<IResponse, Response>();
             services.AddTransient<IUserService, UserService>();
+            services.AddTransient<ITicketService, TicketService>();
         }
     }
 }

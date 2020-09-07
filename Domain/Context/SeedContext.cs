@@ -1,4 +1,5 @@
-﻿using Core.Domain.Entity.Access;
+﻿using Core.Domain.Entity;
+using Core.Domain.Entity.Access;
 using Core.Domain.Entity.LocationEntites;
 using Core.Domain.Entity.TicketEntites;
 using Microsoft.AspNetCore.Identity;
@@ -128,6 +129,10 @@ namespace Domain.Context
             new TicketStatus { Id = 1, NameEN = "Waiting" ,NameAR="انتظار" },
             new TicketStatus { Id = 2, NameEN = "Serving" ,NameAR="تخدم"},
             new TicketStatus { Id = 3, NameEN = "Closed", NameAR = "مغلقة" });
+            #endregion
+            #region Configuration
+            builder.Entity<Configuration>().HasData(
+                new Configuration { Id = 1, StartReservationTime = TimeSpan.Parse("7:30"), EndReservationTime = TimeSpan.Parse("18:30") });
             #endregion
         }
     }

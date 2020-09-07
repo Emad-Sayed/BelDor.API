@@ -9,6 +9,7 @@ namespace Core.Domain.Entity
     {
         public int Id { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;
+        public int? CreatedById { get; set; }
         public AppUser CreatedBy { get; set; }
     }
 }

@@ -26,7 +26,7 @@ namespace Domain
             BranchDepartement = new Repository<BranchDepartement>(_context);
 
             TicketStatus = new Repository<TicketStatus>(_context);
-            Tickets = new Repository<Ticket>(_context);
+            Tickets = new TicketRepository(_context);
             TicketClosed = new Repository<TicketClosed>(_context);
 
             Configurations = new Repository<Configuration>(_context);
@@ -39,7 +39,7 @@ namespace Domain
         public IRepository<BranchDepartement> BranchDepartement { get; }
 
         public IRepository<TicketStatus> TicketStatus { get; }
-        public IRepository<Ticket> Tickets { get; }
+        public ITicketRepository Tickets { get; }
         public IRepository<TicketClosed> TicketClosed { get; }
 
         public IRepository<Configuration> Configurations { get; }

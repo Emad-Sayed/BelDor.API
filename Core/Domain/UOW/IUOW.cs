@@ -19,7 +19,7 @@ namespace Core.Domain.UOW
         IRepository<BranchDepartement> BranchDepartement { get; }
 
         IRepository<TicketStatus> TicketStatus { get; }
-        IRepository<Ticket> Tickets { get; }
+        ITicketRepository Tickets { get; }
         IRepository<TicketClosed> TicketClosed { get; }
 
         IRepository<Configuration> Configurations { get; }
