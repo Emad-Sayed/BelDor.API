@@ -9,5 +9,7 @@ namespace Core.Domain.Repository
     public interface ITicketRepository : IRepository<Ticket>
     {
         (IEnumerable<TicketViewModel>, int) TicketFilter(TicketSearchModel search);
+        (IEnumerable<TicketViewModel>, int) EmployeeDailyTicket(TicketEmployeeSearchModel search);
+        (IEnumerable<TicketViewModel>, int) VisitorDailyTicket(TicketVisitorSearchModel search);
     }
 }

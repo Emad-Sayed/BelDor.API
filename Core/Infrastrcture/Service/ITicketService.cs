@@ -10,5 +10,7 @@ namespace Core.Infrastrcture.Service
     {
         IResponse TicketRequest(TicketRequestModel ticketRequest, int VisitorId);
         IResponse GetTicket(TicketSearchModel search);
+        IResponse EmployeeDailyTickets(TicketEmployeeSearchModel search);
+        IResponse VisitorDailyTickets(TicketVisitorSearchModel search);
     }
 }

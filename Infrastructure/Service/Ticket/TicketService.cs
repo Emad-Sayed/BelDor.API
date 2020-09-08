@@ -20,6 +20,9 @@ namespace Infrastructure.Service.TicketBusinees
             response = response_;
         }
 
+
+
+
         public IResponse GetTicket(TicketSearchModel search)
         {
             var (result, totalRows) = UOW.Tickets.TicketFilter(search);
@@ -71,6 +74,29 @@ namespace Infrastructure.Service.TicketBusinees
             UOW.Tickets.Add(newTicket);
             UOW.Compelete();
             response.data = newTicket;
+            return response;
+        }
+        public IResponse EmployeeDailyTickets(TicketEmployeeSearchModel search)
+        {
+            var (result, totalRows) = UOW.Tickets.EmployeeDailyTicket(search);
+            response.pagesTotalRows = totalRows;
+            float all_pages = (float)totalRows / search.pageSize;
+            response.pagesTotalNumber = (int)Math.Ceiling(all_pages);
+            response.pageSize = search.pageSize;
+            response.pageNumber = search.pageNumber;
+            response.data = result;
+            return response;
+        }
+        public IResponse VisitorDailyTickets(TicketVisitorSearchModel search)
+        {
+            search.specificDay = search.specificDay ?? DateTime.Now;
+            var (result, totalRows) = UOW.Tickets.VisitorDailyTicket(search);
+            response.pagesTotalRows = totalRows;
+            float all_pages = (float)totalRows / search.pageSize;
+            response.pagesTotalNumber = (int)Math.Ceiling(all_pages);
+            response.pageSize = search.pageSize;
+            response.pageNumber = search.pageNumber;
+            response.data = result;
             return response;
         }
     }
