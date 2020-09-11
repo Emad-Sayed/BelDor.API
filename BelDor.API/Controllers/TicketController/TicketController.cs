@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace BelDor.API.Controllers.Visitor.TicketController
+namespace BelDor.API.Controllers.TicketController
 {
     [Route("api/[controller]")]
     [ApiController]
