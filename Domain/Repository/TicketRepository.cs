@@ -7,6 +7,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
+using Core.Helpers;
 
 namespace Domain.Repository
 {
@@ -18,7 +19,8 @@ namespace Domain.Repository
 
         public (IEnumerable<TicketViewModel>, int) EmployeeDailyTicket(TicketEmployeeSearchModel search)
         {
-            var query = Context.Tickets.Where(t => t.CreatedAt.Date == DateTime.Now.Date &&
+            var DateOfNow = DateTime.Now.AddServerTimeHours().Date;
+            var query = Context.Tickets.Where(t => t.CreatedAt.Date == DateOfNow &&
             t.BranchDepartementId == search.branchDepartementId &&
             (search.statusIds == null || search.statusIds.Contains(t.StatusId)))
             .Select(t => new TicketViewModel

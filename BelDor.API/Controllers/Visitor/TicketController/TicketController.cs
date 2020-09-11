@@ -45,6 +45,24 @@ namespace BelDor.API.Controllers.Visitor.TicketController
             var response = service.EmployeeDailyTickets(search);
             return Ok(response);
         }
+        [Authorize(Roles = "EMPLOYEE")]
+        [HttpPost("ServeTicket")]
+        public ActionResult ServeTicket()
+        {
+            int branchDepartementId = int.Parse(User.GetClaims("BranchDepartementId"));
+            int employeeId = User.GetUserId();
+            var response = service.ServeTicket(new TicketServingModel {BranchDepartementId=branchDepartementId,EmployeeId=employeeId});
+            return Ok(response);
+        }
+        [Authorize(Roles = "EMPLOYEE")]
+        [HttpPost("CloseServedTicket")]
+        public ActionResult CloseServedTicket(string Information)
+        {
+            int branchDepartementId = int.Parse(User.GetClaims("BranchDepartementId"));
+            int employeeId = User.GetUserId();
+            var response = service.CloseServedTicket(new TicketClosedModel { BranchDepartementId = branchDepartementId, EmployeeId = employeeId,Information=Information });
+            return Ok(response);
+        }
         [Authorize(Roles = "VISITOR")]
         [HttpGet("VisitorDailyTickets")]
         public ActionResult VisitorDailyTickets([FromQuery] TicketVisitorSearchModel search)

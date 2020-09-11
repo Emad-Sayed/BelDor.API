@@ -12,5 +12,7 @@ namespace Core.Infrastrcture.Service
         IResponse GetTicket(TicketSearchModel search);
         IResponse EmployeeDailyTickets(TicketEmployeeSearchModel search);
         IResponse VisitorDailyTickets(TicketVisitorSearchModel search);
+        IResponse ServeTicket(TicketServingModel model);
+        IResponse CloseServedTicket(TicketClosedModel model);
     }
 }

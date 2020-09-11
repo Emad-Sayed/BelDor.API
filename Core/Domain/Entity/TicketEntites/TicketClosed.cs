@@ -10,5 +10,6 @@ namespace Core.Domain.Entity.TicketEntites
     {
         public Ticket Ticket { get; set; }
         public int TicketId { get; set; }
+        public string Information { get; set; }
     }
 }

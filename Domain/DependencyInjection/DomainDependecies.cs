@@ -28,7 +28,5 @@ namespace Domain.DependencyInjection
                    optionsBuilder => optionsBuilder.MigrationsAssembly("Domain"))
                 );
         }
-
-
     }
 }
