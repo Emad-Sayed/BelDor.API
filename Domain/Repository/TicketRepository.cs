@@ -27,6 +27,8 @@ namespace Domain.Repository
             {
                 Id = t.Id,
                 TicketNumber = t.TicketNumber,
+                VisitorId = t.CreatedById.Value,
+                VisitorName = t.CreatedBy.UserName,
                 BranchId = t.BranchDepartement.BranchId,
                 BranchNameAR = t.BranchDepartement.Branch.NameAR,
                 BranchNameEN = t.BranchDepartement.Branch.NameEN,
@@ -52,6 +54,8 @@ namespace Domain.Repository
             {
                 Id = t.Id,
                 TicketNumber = t.TicketNumber,
+                VisitorId = t.CreatedById.Value,
+                VisitorName = t.CreatedBy.UserName,
                 BranchId = t.BranchDepartement.BranchId,
                 BranchNameAR = t.BranchDepartement.Branch.NameAR,
                 BranchNameEN = t.BranchDepartement.Branch.NameEN,
@@ -74,6 +78,8 @@ namespace Domain.Repository
                 {
                     Id = t.Id,
                     TicketNumber = t.TicketNumber,
+                    VisitorId = t.CreatedById.Value,
+                    VisitorName = t.CreatedBy.UserName,
                     BranchId = t.BranchDepartement.BranchId,
                     BranchNameAR = t.BranchDepartement.Branch.NameAR,
                     BranchNameEN = t.BranchDepartement.Branch.NameEN,

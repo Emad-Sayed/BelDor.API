@@ -21,7 +21,7 @@ namespace Domain
 
             Employees = new Repository<AppUserEmployee>(_context);
 
-            Branches = new Repository<Branch>(_context);
+            Branches = new BranchRepository(_context);
             Departements = new Repository<Departement>(_context);
             BranchDepartement = new Repository<BranchDepartement>(_context);
 
@@ -34,7 +34,7 @@ namespace Domain
         }
         public IRepository<AppUserEmployee> Employees { get; }
 
-        public IRepository<Branch> Branches { get; }
+        public IBranchRepository Branches { get; }
         public IRepository<Departement> Departements { get; }
         public IRepository<BranchDepartement> BranchDepartement { get; }
 

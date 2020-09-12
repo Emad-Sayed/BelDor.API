@@ -8,6 +8,8 @@ namespace Core.Domain.ViewModel.Ticket
     {
         public int Id { get; set; }
         public int TicketNumber { get; set; }
+        public int VisitorId { get; set; }
+        public string VisitorName { get; set; }
         public int StatusId { get; set; }
         public string StatusNameAR { get; set; }
         public string StatusNameEN { get; set; }

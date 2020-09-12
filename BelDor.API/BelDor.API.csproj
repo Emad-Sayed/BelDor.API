@@ -22,5 +22,9 @@
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Controllers\Lookups\DepartementController\" />
+  </ItemGroup>
+
 
 </Project>

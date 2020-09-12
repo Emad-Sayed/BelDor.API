@@ -14,7 +14,7 @@ namespace Core.Domain.UOW
     {
         IRepository<AppUserEmployee> Employees { get;  }
 
-        IRepository<Branch> Branches { get; }
+        IBranchRepository Branches { get; }
         IRepository<Departement> Departements { get; }
         IRepository<BranchDepartement> BranchDepartement { get; }
 
