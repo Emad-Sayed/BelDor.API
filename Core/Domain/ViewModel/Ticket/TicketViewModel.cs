@@ -19,5 +19,7 @@ namespace Core.Domain.ViewModel.Ticket
         public int DepartementId { get; set; }
         public string DepartementNameAR { get; set; }
         public string DepartementNameEN { get; set; }
+        public int BranchDepartementId { get; set; }
+        public int CurrentNumber { get; set; }
     }
 }

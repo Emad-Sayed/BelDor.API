@@ -38,6 +38,8 @@ namespace Domain.Repository
                 StatusId = t.StatusId,
                 StatusNameAR = t.Status.NameAR,
                 StatusNameEN = t.Status.NameEN,
+                BranchDepartementId = t.BranchDepartementId
+
             });
             var count = query.Count();
             var data = query.OrderBy(c => c.TicketNumber).Skip((search.pageNumber - 1) * search.pageSize).Take(search.pageSize);
@@ -47,8 +49,8 @@ namespace Domain.Repository
         {
             var query = Context.Tickets.Where(t => t.CreatedAt.Date == search.specificDay.Value.Date &&
             t.CreatedById == search.visitorId &&
-            (search.statusIds == null || search.statusIds.Contains(t.StatusId))&&
-            (search.branchIds == null || search.branchIds.Contains(t.BranchDepartement.BranchId))&&
+            (search.statusIds == null || search.statusIds.Contains(t.StatusId)) &&
+            (search.branchIds == null || search.branchIds.Contains(t.BranchDepartement.BranchId)) &&
             (search.departementIds == null || search.departementIds.Contains(t.BranchDepartement.DepartementId)))
             .Select(t => new TicketViewModel
             {
@@ -65,6 +67,7 @@ namespace Domain.Repository
                 StatusId = t.StatusId,
                 StatusNameAR = t.Status.NameAR,
                 StatusNameEN = t.Status.NameEN,
+                BranchDepartementId = t.BranchDepartementId
             });
             var count = query.Count();
             var data = query.OrderBy(c => c.Id).Skip((search.pageNumber - 1) * search.pageSize).Take(search.pageSize);
@@ -89,10 +92,17 @@ namespace Domain.Repository
                     StatusId = t.StatusId,
                     StatusNameAR = t.Status.NameAR,
                     StatusNameEN = t.Status.NameEN,
+                    BranchDepartementId = t.BranchDepartementId
                 });
             var count = query.Count();
             var data = query.OrderBy(c => c.Id).Skip((search.pageNumber - 1) * search.pageSize).Take(search.pageSize);
             return (data, count);
+        }
+        public int? GetCurrentTicket(int branchDepartementId,int statusId)
+        {
+            var DateOfNow = DateTime.Now.AddServerTimeHours().Date;
+            return Context.Tickets.Where(t => t.CreatedAt.Date == DateOfNow && t.BranchDepartementId == branchDepartementId && t.StatusId == statusId)
+            .Max(x => (int?)x.TicketNumber) ?? 0;
         }
     }
 }

@@ -97,12 +97,19 @@ namespace Infrastructure.Service.TicketBusinees
         {
             search.specificDay = search.specificDay ?? DateTime.Now.AddServerTimeHours().Date;
             var (result, totalRows) = UOW.Tickets.VisitorDailyTicket(search);
+            var dataListed = result.ToList();
+            foreach (var ticket in dataListed)
+            {
+                ticket.CurrentNumber = UOW.Tickets.GetCurrentTicket(ticket.BranchDepartementId, 2).Value;
+                if (ticket.CurrentNumber == 0)
+                    ticket.CurrentNumber = UOW.Tickets.GetCurrentTicket(ticket.BranchDepartementId, 1).Value;
+            }
             response.pagesTotalRows = totalRows;
             float all_pages = (float)totalRows / search.pageSize;
             response.pagesTotalNumber = (int)Math.Ceiling(all_pages);
             response.pageSize = search.pageSize;
             response.pageNumber = search.pageNumber;
-            response.data = result;
+            response.data = dataListed;
             return response;
         }
 
