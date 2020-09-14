@@ -26,6 +26,7 @@ namespace Domain.Repository
             .Select(t => new TicketViewModel
             {
                 Id = t.Id,
+                CreateTime = t.CreatedAt,
                 TicketNumber = t.TicketNumber,
                 VisitorId = t.CreatedById.Value,
                 VisitorName = t.CreatedBy.UserName,
@@ -55,6 +56,7 @@ namespace Domain.Repository
             .Select(t => new TicketViewModel
             {
                 Id = t.Id,
+                CreateTime = t.CreatedAt,
                 TicketNumber = t.TicketNumber,
                 VisitorId = t.CreatedById.Value,
                 VisitorName = t.CreatedBy.UserName,
@@ -80,6 +82,7 @@ namespace Domain.Repository
                 .Select(t => new TicketViewModel
                 {
                     Id = t.Id,
+                    CreateTime = t.CreatedAt,
                     TicketNumber = t.TicketNumber,
                     VisitorId = t.CreatedById.Value,
                     VisitorName = t.CreatedBy.UserName,
@@ -97,12 +100,6 @@ namespace Domain.Repository
             var count = query.Count();
             var data = query.OrderBy(c => c.Id).Skip((search.pageNumber - 1) * search.pageSize).Take(search.pageSize);
             return (data, count);
-        }
-        public int? GetCurrentTicket(int branchDepartementId,int statusId)
-        {
-            var DateOfNow = DateTime.Now.AddServerTimeHours().Date;
-            return Context.Tickets.Where(t => t.CreatedAt.Date == DateOfNow && t.BranchDepartementId == branchDepartementId && t.StatusId == statusId)
-            .Max(x => (int?)x.TicketNumber) ?? 0;
         }
     }
 }

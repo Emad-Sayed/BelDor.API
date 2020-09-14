@@ -7,6 +7,7 @@ namespace Core.Domain.ViewModel.Ticket
     public class TicketViewModel
     {
         public int Id { get; set; }
+        public DateTime CreateTime  { get; set; }
         public int TicketNumber { get; set; }
         public int VisitorId { get; set; }
         public string VisitorName { get; set; }

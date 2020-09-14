@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-
+using Core.Helpers;
 namespace BelDor.API.Controllers
 {
     [Route("api/[controller]")]
@@ -14,9 +14,11 @@ namespace BelDor.API.Controllers
     public class TestController : ControllerBase
     {
         [HttpGet]
+        [AllowAnonymous]
         public ActionResult get()
         {
-            return Ok();
+            var ServerDateTime = DateTime.Now.AddServerTimeHours();
+            return Ok(ServerDateTime);
         }
     }
 }

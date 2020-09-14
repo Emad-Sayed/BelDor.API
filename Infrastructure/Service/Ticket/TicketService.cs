@@ -100,9 +100,9 @@ namespace Infrastructure.Service.TicketBusinees
             var dataListed = result.ToList();
             foreach (var ticket in dataListed)
             {
-                ticket.CurrentNumber = UOW.Tickets.GetCurrentTicket(ticket.BranchDepartementId, 2).Value;
-                if (ticket.CurrentNumber == 0)
-                    ticket.CurrentNumber = UOW.Tickets.GetCurrentTicket(ticket.BranchDepartementId, 1).Value;
+                ticket.CurrentNumber = UOW.Tickets.Find(t => t.BranchDepartementId == ticket.BranchDepartementId
+                                     && t.CreatedAt.Date == search.specificDay && t.StatusId == 2)
+                                    .Select(t => t.TicketNumber).DefaultIfEmpty(0).Max();
             }
             response.pagesTotalRows = totalRows;
             float all_pages = (float)totalRows / search.pageSize;
