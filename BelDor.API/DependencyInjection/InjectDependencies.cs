@@ -48,7 +48,6 @@ namespace BelDor.API.DependencyInjection
             IMapper mapper = mappingConfig.CreateMapper();
             service.AddSingleton(mapper);
         }
-
         public static void CORSInjection(this IServiceCollection service)
         {
             service.AddCors(options =>
@@ -70,6 +69,7 @@ namespace BelDor.API.DependencyInjection
                 options.Password.RequireUppercase = false;
                 options.Password.RequireNonAlphanumeric = false;
                 options.Password.RequireDigit = false;
+                options.User.RequireUniqueEmail = true;
             })
                 .AddEntityFrameworkStores<AppDbContext>();
         }

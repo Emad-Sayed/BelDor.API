@@ -21,9 +21,6 @@ namespace Infrastructure.Service.TicketBusinees
             response = response_;
         }
 
-
-
-
         public IResponse GetTicket(TicketSearchModel search)
         {
             var (result, totalRows) = UOW.Tickets.TicketFilter(search);
@@ -35,7 +32,6 @@ namespace Infrastructure.Service.TicketBusinees
             response.data = result;
             return response;
         }
-
         public IResponse TicketRequest(TicketRequestModel ticketRequest, int VisitorId)
         {
 
@@ -112,7 +108,6 @@ namespace Infrastructure.Service.TicketBusinees
             response.data = dataListed;
             return response;
         }
-
         public IResponse ServeTicket(TicketServingModel model)
         {
             //as3'r ticket waiting
@@ -153,7 +148,6 @@ namespace Infrastructure.Service.TicketBusinees
             response.data = currentTicket;
             return response;
         }
-
         public IResponse CloseServedTicket(TicketClosedModel model)
         {
             //smallest ticket m3molha serve mn el employee dh

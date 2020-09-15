@@ -8,6 +8,6 @@ namespace Core.Domain.Entity.Access
 {
     public class AppUser : IdentityUser<int>
     {
-        public int SSN { get; set; }
+        public string Phone { get; set; }
     }
 }
