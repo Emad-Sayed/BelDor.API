@@ -128,7 +128,8 @@ namespace Domain.Context
             builder.Entity<TicketStatus>().HasData(
             new TicketStatus { Id = 1, NameEN = "Waiting" ,NameAR="انتظار" },
             new TicketStatus { Id = 2, NameEN = "Serving" ,NameAR="تخدم"},
-            new TicketStatus { Id = 3, NameEN = "Closed", NameAR = "مغلقة" });
+            new TicketStatus { Id = 3, NameEN = "Closed", NameAR = "مغلقة" },
+            //new TicketStatus { Id = 4, NameEN = "Missed", NameAR = "تخلفت" });
             #endregion
             #region Configuration
             builder.Entity<Configuration>().HasData(
