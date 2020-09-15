@@ -31,7 +31,7 @@ namespace BelDor.API.Controllers.TicketController
         }
         //[Authorize(Roles = "ADMIN")]
         [HttpGet]
-        public ActionResult GetTickets([FromQuery]TicketSearchModel search)
+        public ActionResult GetTickets([FromQuery] TicketSearchModel search)
         {
             var response = service.GetTicket(search);
             return Ok(response);
@@ -51,7 +51,7 @@ namespace BelDor.API.Controllers.TicketController
         {
             int branchDepartementId = int.Parse(User.GetClaims("BranchDepartementId"));
             int employeeId = User.GetUserId();
-            var response = service.ServeTicket(new TicketServingModel {BranchDepartementId=branchDepartementId,EmployeeId=employeeId});
+            var response = service.ServeTicket(new TicketServingModel { BranchDepartementId = branchDepartementId, EmployeeId = employeeId });
             return Ok(response);
         }
         [Authorize(Roles = "EMPLOYEE")]
@@ -60,9 +60,31 @@ namespace BelDor.API.Controllers.TicketController
         {
             int branchDepartementId = int.Parse(User.GetClaims("BranchDepartementId"));
             int employeeId = User.GetUserId();
-            var response = service.CloseServedTicket(new TicketClosedModel { BranchDepartementId = branchDepartementId, EmployeeId = employeeId,Information=Information });
+            var response = service.CloseServedTicket(new TicketClosedModel { BranchDepartementId = branchDepartementId, EmployeeId = employeeId, Information = Information });
             return Ok(response);
         }
+
+        [Authorize(Roles = "EMPLOYEE")]
+        [HttpPost("SetTicketAsMissed")]
+        public ActionResult SetTicketAsMissed()
+        {
+            int branchDepartementId = int.Parse(User.GetClaims("BranchDepartementId"));
+            int employeeId = User.GetUserId();
+            var response = service.SetTicketAsMissed(new TicketClosedModel { BranchDepartementId = branchDepartementId, EmployeeId = employeeId });
+            return Ok(response);
+        }
+
+        [Authorize(Roles = "EMPLOYEE")]
+        [HttpPost("ServeMissedTicket")]
+        public ActionResult ServeMissedTicket([FromQuery]int ticketId)
+        {
+            int branchDepartementId = int.Parse(User.GetClaims("BranchDepartementId"));
+            int employeeId = User.GetUserId();
+            var response = service.ServeMissedTicket(new TicketServeMissedModel { TicketId = ticketId, BranchDepartementId = branchDepartementId, EmployeeId = employeeId });
+            return Ok(response);
+        }
+
+
         [Authorize(Roles = "VISITOR")]
         [HttpGet("VisitorDailyTickets")]
         public ActionResult VisitorDailyTickets([FromQuery] TicketVisitorSearchModel search)

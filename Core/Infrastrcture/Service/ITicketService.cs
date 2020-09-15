@@ -14,5 +14,7 @@ namespace Core.Infrastrcture.Service
         IResponse VisitorDailyTickets(TicketVisitorSearchModel search);
         IResponse ServeTicket(TicketServingModel model);
         IResponse CloseServedTicket(TicketClosedModel model);
+        IResponse SetTicketAsMissed(TicketClosedModel model);
+        IResponse ServeMissedTicket(TicketServeMissedModel model);
     }
 }
