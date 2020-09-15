@@ -168,5 +168,64 @@ namespace Infrastructure.Service.TicketBusinees
             response.data = servingTicket;
             return response;
         }
+        #region Missed
+        public IResponse SetTicketAsMissed(TicketClosedModel model)
+        {
+            //smallest ticket m3molha serve mn el employee dh
+            var ServerDateTime = DateTime.Now.AddServerTimeHours().Date;
+            var servingTicket = UOW.Tickets.SingleOrDefault(t => t.BranchDepartementId == model.BranchDepartementId
+                                && t.CreatedAt.Date == ServerDateTime && t.StatusId == 2 && t.UpdatedById == model.EmployeeId);
+            if (servingTicket == null)
+            {
+                response.status = false;
+                response.error_AR = "لا يوجد تكت تخدم منك";
+                response.error_EN = "There is no serving ticket by you";
+                response.data = null;
+                return response;
+            }
+            servingTicket.StatusId = 4; // set it as Missed
+            UOW.Compelete();
+            response.data = servingTicket;
+            return response;
+        }
+        public IResponse ServeMissedTicket(TicketServeMissedModel model)
+        {
+            var ServerDateTime = DateTime.Now.AddServerTimeHours();
+            var TimeOfNow = ServerDateTime.TimeOfDay;
+            var DateOfNow = ServerDateTime.Date;
+            var Config = UOW.Configurations.FirstOrDefault(c => true);
+            if (Config.StartReservationTime > TimeOfNow || Config.EndReservationTime < TimeOfNow)
+            {
+                response.status = false;
+                response.error_AR = "لا يمكن الخدمة في هذا الموعد";
+                response.error_EN = "Time not available for Reservation";
+                response.data = null;
+                return response;
+            }
+            var servingTicket = UOW.Tickets.SingleOrDefault(t => t.BranchDepartementId == model.BranchDepartementId
+            && t.CreatedAt.Date == DateOfNow && t.StatusId == 2 && t.UpdatedById == model.EmployeeId);
+            if (servingTicket != null)
+            {
+                response.data = servingTicket;
+                return response;
+            }
+            var misseddTicket = UOW.Tickets.SingleOrDefault(t => t.Id == model.TicketId && t.BranchDepartementId == model.BranchDepartementId
+            && t.CreatedAt.Date == DateOfNow && t.StatusId == 4);
+            if (misseddTicket == null)
+            {
+                response.status = false;
+                response.error_AR = "التكت لم تتخلف";
+                response.error_EN = "Ticket Not Missed";
+                response.data = null;
+                return response;
+            }
+            misseddTicket.StatusId = 2;
+            misseddTicket.UpdatedById = model.EmployeeId;
+            UOW.Compelete();
+            return response;
+        }
+
+        #endregion
+
     }
 }

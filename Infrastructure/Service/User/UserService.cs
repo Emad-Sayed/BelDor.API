@@ -41,9 +41,9 @@ namespace Infrastructure.Service.User
             var result = await userManager.CreateAsync(newAppUser, visitor.Password);
             if (result.Succeeded)
             {
-                await userManager.AddToRoleAsync(newAppUser,"VISITOR");
+                await userManager.AddToRoleAsync(newAppUser, "VISITOR");
             }
-            else 
+            else
             {
                 response.error_EN = result.Errors.Select(e => e.Description).FirstOrDefault();
                 response.status = false;
