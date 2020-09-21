@@ -7,6 +7,6 @@ namespace Core.Domain.ViewModel.Ticket
     public class TicketEmployeeSearchModel : BaseSearch
     {
         public int branchDepartementId { get; set; }
-        public List<int> statusIds { get; set; }
+        public List<int> statusIds { get; set; } = new List<int>();
     }
 }

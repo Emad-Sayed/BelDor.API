@@ -22,7 +22,7 @@ namespace Domain.Repository
             var DateOfNow = DateTime.Now.AddServerTimeHours().Date;
             var query = Context.Tickets.Where(t => t.CreatedAt.Date == DateOfNow &&
             t.BranchDepartementId == search.branchDepartementId &&
-            (search.statusIds == null || search.statusIds.Contains(t.StatusId)))
+            (search.statusIds.Count == 0 || search.statusIds.Contains(t.StatusId)))
             .Select(t => new TicketViewModel
             {
                 Id = t.Id,
@@ -50,9 +50,9 @@ namespace Domain.Repository
         {
             var query = Context.Tickets.Where(t => t.CreatedAt.Date == search.specificDay.Value.Date &&
             t.CreatedById == search.visitorId &&
-            (search.statusIds == null || search.statusIds.Contains(t.StatusId)) &&
-            (search.branchIds == null || search.branchIds.Contains(t.BranchDepartement.BranchId)) &&
-            (search.departementIds == null || search.departementIds.Contains(t.BranchDepartement.DepartementId)))
+            (search.statusIds.Count == 0 || search.statusIds.Contains(t.StatusId)) &&
+            (search.branchIds.Count == 0 || search.branchIds.Contains(t.BranchDepartement.BranchId)) &&
+            (search.departementIds.Count == 0 || search.departementIds.Contains(t.BranchDepartement.DepartementId)))
             .Select(t => new TicketViewModel
             {
                 Id = t.Id,
@@ -78,7 +78,7 @@ namespace Domain.Repository
 
         public (IEnumerable<TicketViewModel>, int) TicketFilter(TicketSearchModel search)
         {
-            var query = Context.Tickets.Where(t => search.ticketIds == null || search.ticketIds.Contains(t.Id))
+            var query = Context.Tickets.Where(t => search.ticketIds.Count == 0 || search.ticketIds.Contains(t.Id))
                 .Select(t => new TicketViewModel
                 {
                     Id = t.Id,
