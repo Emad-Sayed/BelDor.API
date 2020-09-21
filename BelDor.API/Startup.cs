@@ -12,6 +12,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using BelDor.API.DependencyInjection;
 using BelDor.API.Middlewares;
+using FluentValidation.AspNetCore;
+using Core.Domain.Mapper;
 
 namespace BelDor.API
 {
@@ -28,7 +30,11 @@ namespace BelDor.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.InjectAllDependecies(Configuration);
-            services.AddControllers();
+            services.AddControllers().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<MappingProfile>());
+            services.Configure<ApiBehaviorOptions>(options =>
+            {
+                options.SuppressModelStateInvalidFilter = true;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

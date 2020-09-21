@@ -17,13 +17,22 @@ namespace BelDor.API.Controllers.Lookups.BranchController
     public class BranchController : ControllerBase
     {
         private IService<BaseSearch, BranchCreateModel> service;
-        public BranchController(IService<BaseSearch, BranchCreateModel> service_)
+        private IResponse modelStateResponse;
+
+        public BranchController(IService<BaseSearch, BranchCreateModel> service_, IResponse modelStateResponse_)
         {
             service = service_;
+            modelStateResponse = modelStateResponse_;
         }
         [HttpPost]
         public ActionResult AddBranch(BranchCreateModel branch)
         {
+            if (!ModelState.IsValid)
+            {
+                modelStateResponse.status = false;
+                modelStateResponse.error_EN = String.Join("&&", ModelState.Values.SelectMany(e => e.Errors.Select(e => e.ErrorMessage)));
+                return BadRequest(modelStateResponse);
+            }
             var response = service.Create(branch);
             return Ok(response);
         }
@@ -37,6 +46,8 @@ namespace BelDor.API.Controllers.Lookups.BranchController
         public ActionResult GetBrancheById(int id)
         {
             var response = service.GetById(id);
+            if (!response.status)
+                return BadRequest(response);
             return Ok(response);
         }
     }
