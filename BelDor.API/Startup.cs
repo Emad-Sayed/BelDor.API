@@ -14,6 +14,7 @@ using BelDor.API.DependencyInjection;
 using BelDor.API.Middlewares;
 using FluentValidation.AspNetCore;
 using Core.Domain.Mapper;
+using BelDor.API.Filters;
 
 namespace BelDor.API
 {
@@ -30,10 +31,12 @@ namespace BelDor.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.InjectAllDependecies(Configuration);
-            services.AddControllers().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<MappingProfile>());
-            services.Configure<ApiBehaviorOptions>(options =>
+            services.AddControllers(config=> {
+                config.Filters.Add<ValidationFilter>();
+            }).AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<MappingProfile>());
+            services.Configure<ApiBehaviorOptions>(opt =>
             {
-                options.SuppressModelStateInvalidFilter = true;
+                opt.SuppressModelStateInvalidFilter = true;
             });
         }
 
