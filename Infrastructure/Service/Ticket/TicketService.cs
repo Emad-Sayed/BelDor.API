@@ -10,6 +10,7 @@ using Core.Domain.Entity.TicketEntites;
 using Core.Helpers;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Collections;
+using Core.Infrastrcture.Notification.SignalR;
 
 namespace Infrastructure.Service.TicketBusinees
 {
@@ -17,10 +18,12 @@ namespace Infrastructure.Service.TicketBusinees
     {
         public readonly IUOW UOW;
         public readonly IResponse response;
-        public TicketService(IUOW uow_, IResponse response_)
+        public INotificationService notification;
+        public TicketService(IUOW uow_, IResponse response_, INotificationService notification_)
         {
             UOW = uow_;
             response = response_;
+            notification = notification_;
         }
 
         public IResponse GetTicket(TicketSearchModel search)
@@ -80,6 +83,11 @@ namespace Infrastructure.Service.TicketBusinees
             newTicket.StatusId = 1;
             UOW.Tickets.Add(newTicket);
             UOW.Compelete();
+            #region notification
+            notification.NotifyNewEvent("E_" + newTicket.BranchDepartementId,
+                new { newTicket.Id, newTicket.TicketNumber, newTicket.CreatedById.Value });
+            #endregion
+            //Notification Employees
             response.data = VisitorDailyTickets(new TicketVisitorSearchModel()
             { ticketIds = { newTicket.Id }, visitorId = newTicket.CreatedById.Value }).data;
             return response;
@@ -151,6 +159,10 @@ namespace Infrastructure.Service.TicketBusinees
             currentTicket.StatusId = 2;
             currentTicket.UpdatedById = model.EmployeeId;
             UOW.Compelete();
+            #region notification
+            notification.NotifyNewEvent("V_" + currentTicket.BranchDepartementId,
+                new { currentTicket.Id, currentTicket.BranchDepartementId, currentTicket.TicketNumber, currentTicket.CreatedById.Value });
+            #endregion
             response.data = currentTicket;
             return response;
         }
