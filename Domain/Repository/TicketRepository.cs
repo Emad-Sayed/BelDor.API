@@ -102,5 +102,32 @@ namespace Domain.Repository
             var data = query.OrderBy(c => c.Id).Skip((search.pageNumber - 1) * search.pageSize).Take(search.pageSize);
             return (data, count);
         }
+        public TicketClosedViewModel ClosedTicketInfo(int ticketId)
+        {
+            var query = Context.TicketClosed.Where(t => t.TicketId == ticketId)
+                .Select(t => new TicketClosedViewModel
+                {
+                    Id = t.Id,
+                    CreateTime = t.Ticket.CreatedAt,
+                    TicketNumber = t.Ticket.TicketNumber,
+                    VisitorId = t.Ticket.CreatedById.Value,
+                    VisitorName = t.Ticket.CreatedBy.UserName,
+                    EmployeeName = t.CreatedBy.UserName,
+                    EmployeeId = t.CreatedById.Value,
+                    Information = t.Information,
+                    BranchId = t.Ticket.BranchDepartement.BranchId,
+                    BranchNameAR = t.Ticket.BranchDepartement.Branch.NameAR,
+                    BranchNameEN = t.Ticket.BranchDepartement.Branch.NameEN,
+                    DepartementId = t.Ticket.BranchDepartement.DepartementId,
+                    DepartementNameAR = t.Ticket.BranchDepartement.Departement.NameAR,
+                    DepartementNameEN = t.Ticket.BranchDepartement.Departement.NameEN,
+                    StatusId = t.Ticket.StatusId,
+                    StatusNameAR = t.Ticket.Status.NameAR,
+                    StatusNameEN = t.Ticket.Status.NameEN,
+                    BranchDepartementId = t.Ticket.BranchDepartementId
+                });
+
+            return query.SingleOrDefault();
+        }
     }
 }
