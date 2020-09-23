@@ -94,5 +94,15 @@ namespace BelDor.API.Controllers.TicketController
             var response = service.VisitorDailyTickets(search);
             return Ok(response);
         }
+
+        //[Authorize]
+        [HttpGet("ClosedTicketInfo{id}")]
+        public ActionResult ClosedTicketInfo(int id)
+        {
+            var response = service.ClosedTicketInfo(id);
+            if (!response.status)
+                return NotFound(response);
+            return Ok(response);
+        }
     }
 }

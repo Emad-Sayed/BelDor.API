@@ -11,5 +11,6 @@ namespace Core.Domain.Repository
         (IEnumerable<TicketViewModel>, int) TicketFilter(TicketSearchModel search);
         (IEnumerable<TicketViewModel>, int) EmployeeDailyTicket(TicketEmployeeSearchModel search);
         (IEnumerable<TicketViewModel>, int) VisitorDailyTicket(TicketVisitorSearchModel search);
+        TicketClosedViewModel ClosedTicketInfo(int ticketId);
     }
 }

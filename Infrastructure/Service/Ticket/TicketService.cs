@@ -154,6 +154,7 @@ namespace Infrastructure.Service.TicketBusinees
             response.data = currentTicket;
             return response;
         }
+        #region Closed
         public IResponse CloseServedTicket(TicketClosedModel model)
         {
             //smallest ticket m3molha serve mn el employee dh
@@ -174,6 +175,17 @@ namespace Infrastructure.Service.TicketBusinees
             response.data = servingTicket;
             return response;
         }
+
+        public IResponse ClosedTicketInfo(int id)
+        {
+            var data = UOW.Tickets.ClosedTicketInfo(id);
+            if (data == null)
+                response.status = false;
+            else
+                response.data = data;
+            return response;
+        }
+        #endregion
         #region Missed
         public IResponse SetTicketAsMissed(TicketClosedModel model)
         {
@@ -230,7 +242,6 @@ namespace Infrastructure.Service.TicketBusinees
             UOW.Compelete();
             return response;
         }
-
         #endregion
 
     }
