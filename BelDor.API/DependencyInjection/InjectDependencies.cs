@@ -29,7 +29,7 @@ namespace BelDor.API.DependencyInjection
             services.CORSInjection();
             services.IdentityInjection();
             services.AuthInjection(configuration);
-            //services.SignalRInjection();
+            services.SignalRInjection();
         }
         public static void SwaggerInjection(this IServiceCollection services)
         {
@@ -111,6 +111,9 @@ namespace BelDor.API.DependencyInjection
                 };
             });
         }
-
+        public static void SignalRInjection(this IServiceCollection service)
+        {
+            service.AddSignalR();
+        }
     }
 }

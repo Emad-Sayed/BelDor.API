@@ -15,6 +15,7 @@ using BelDor.API.Middlewares;
 using FluentValidation.AspNetCore;
 using Core.Domain.Mapper;
 using BelDor.API.Filters;
+using Infrastructure.Notification.SignalR.Hubs;
 
 namespace BelDor.API
 {
@@ -59,7 +60,10 @@ namespace BelDor.API
 
             app.UseAuthentication();
             app.UseAuthorization();
-
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapHub<NotificationCenter>("/api/notificationcenter");
+            });
             app.UseMiddleware(typeof(ErrorHandlingMiddleware));
 
             app.UseEndpoints(endpoints =>
