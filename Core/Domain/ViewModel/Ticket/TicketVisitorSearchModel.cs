@@ -8,6 +8,7 @@ namespace Core.Domain.ViewModel.Ticket
     {
         public int visitorId { get; set; }
         public DateTime? specificDay { get; set; }
+        public List<int> ticketIds { get; set; } = new List<int>();
         public List<int> statusIds { get; set; } = new List<int>();
         public List<int> branchIds { get; set; } = new List<int>();
         public List<int> departementIds { get; set; } = new List<int>();

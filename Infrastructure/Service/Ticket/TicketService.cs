@@ -8,6 +8,8 @@ using System.Collections.Generic;
 using System.Text;
 using Core.Domain.Entity.TicketEntites;
 using Core.Helpers;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System.Collections;
 
 namespace Infrastructure.Service.TicketBusinees
 {
@@ -44,17 +46,6 @@ namespace Infrastructure.Service.TicketBusinees
 
             var Config = UOW.Configurations.FirstOrDefault(c => true);
 
-            //CHECK IF HAS TICKET BEFORE
-            var SelectedTicket = UOW.Tickets.FirstOrDefault(t => t.BranchDepartementId == selectedBranchDepartement.Id
-            && t.CreatedById == VisitorId && t.StatusId != 3 && t.CreatedAt.Date == DateOfNow);
-            if (SelectedTicket != null)
-            {
-                response.status = false;
-                response.error_AR = "يوجد حجز مسبق في نفس اليوم";
-                response.error_EN = "There is already already ticket Requested";
-                response.data = SelectedTicket;
-                return response;
-            }
 
             if (Config.StartReservationTime > TimeOfNow || Config.EndReservationTime < TimeOfNow)
             {
@@ -62,6 +53,20 @@ namespace Infrastructure.Service.TicketBusinees
                 response.error_AR = "لا يمكن الحجز في هذا الموعد";
                 response.error_EN = "Time not available for Reservation";
                 response.data = null;
+                return response;
+            }
+
+
+            //CHECK IF HAS TICKET BEFORE
+            var SelectedTicket = UOW.Tickets.FirstOrDefault(t => t.BranchDepartementId == selectedBranchDepartement.Id
+            && t.CreatedById == VisitorId && t.StatusId != 3 && t.CreatedAt.Date == DateOfNow);
+            if (SelectedTicket != null)
+            {
+                response.status = false;
+                response.error_AR = "يوجد حجز مسبق في نفس اليوم";
+                response.error_EN = "There is already ticket Requested";
+                response.data = VisitorDailyTickets(new TicketVisitorSearchModel()
+                { ticketIds = { SelectedTicket.Id }, visitorId = SelectedTicket.CreatedById.Value }).data;
                 return response;
             }
 
@@ -75,7 +80,8 @@ namespace Infrastructure.Service.TicketBusinees
             newTicket.StatusId = 1;
             UOW.Tickets.Add(newTicket);
             UOW.Compelete();
-            response.data = newTicket;
+            response.data = VisitorDailyTickets(new TicketVisitorSearchModel()
+            { ticketIds = { newTicket.Id }, visitorId = newTicket.CreatedById.Value }).data;
             return response;
         }
         public IResponse EmployeeDailyTickets(TicketEmployeeSearchModel search)

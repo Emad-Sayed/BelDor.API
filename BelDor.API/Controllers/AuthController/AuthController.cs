@@ -65,6 +65,7 @@ namespace BelDor.API.Controllers.AuthController
             var Claims = new[]
             {
                 new Claim("Id",Authuser.Id+""),
+                new Claim("Name",Authuser.UserName+""),
                 new Claim("BranchDepartementId",BranchDepartementId+""),
                 new Claim(JwtRegisteredClaimNames.Email,Authuser.Email),
                 new Claim(JwtRegisteredClaimNames.Jti,Guid.NewGuid().ToString())

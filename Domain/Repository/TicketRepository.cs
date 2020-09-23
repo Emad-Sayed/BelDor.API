@@ -50,6 +50,7 @@ namespace Domain.Repository
         {
             var query = Context.Tickets.Where(t => t.CreatedAt.Date == search.specificDay.Value.Date &&
             t.CreatedById == search.visitorId &&
+            (search.ticketIds.Count == 0 || search.ticketIds.Contains(t.Id)) &&
             (search.statusIds.Count == 0 || search.statusIds.Contains(t.StatusId)) &&
             (search.branchIds.Count == 0 || search.branchIds.Contains(t.BranchDepartement.BranchId)) &&
             (search.departementIds.Count == 0 || search.departementIds.Contains(t.BranchDepartement.DepartementId)))
