@@ -1,5 +1,6 @@
 ﻿using Core.Domain.ViewModel;
 using Core.Domain.ViewModel.Lookups.Branch;
+using Core.Domain.ViewModel.Lookups.Departement;
 using Core.Infrastrcture.Notification.SignalR;
 using Core.Infrastrcture.Service;
 using Infrastructure.Notification.SignalR.Service;
@@ -21,7 +22,8 @@ namespace Infrastructure.DependencyInjection
             services.AddTransient<INotificationService, NotificationCenterService>();
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<ITicketService, TicketService>();
-            services.AddTransient<IService<BaseSearch,BranchCreateModel>, BranchService>();
+            services.AddTransient<IService<BaseSearch, BranchCreateModel>, BranchService>();
+            services.AddTransient<IService<BaseSearch, DepartementCreateModel>, DepartementService>();
         }
     }
 }
