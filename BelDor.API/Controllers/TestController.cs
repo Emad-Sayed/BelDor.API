@@ -13,7 +13,7 @@ namespace BelDor.API.Controllers
     [Authorize(Roles = "ADMIN")]
     public class TestController : ControllerBase
     {
-        [HttpGet]
+        [HttpGet("GetServerTime")]
         [AllowAnonymous]
         public ActionResult get()
         {
