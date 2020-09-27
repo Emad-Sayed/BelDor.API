@@ -33,16 +33,3 @@ steps:
   inputs:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
-- task: FtpUpload@2
-  inputs:
-    credentialsOption: 'inputs'
-    serverUrl: 'ftp://ftp.site4now.net'
-    username: 'emaddemo-001'
-    password: 'P@ssw0rd'
-    rootDirectory: '$(Agent.BuildDirectory)'
-    filePatterns: '**'
-    remoteDirectory: '/'
-    clean: false
-    cleanContents: false
-    preservePaths: false
-    trustSSL: false
