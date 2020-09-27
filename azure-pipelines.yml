@@ -42,8 +42,4 @@ steps:
     password: 'P@ssw0rd'
     rootDirectory: 'D:\a\1\s\BelDor.API\obj\Release\netcoreapp3.1\'
     filePatterns: '**'
-    remoteDirectory: www/beldor.api/
-    clean: false
-    cleanContents: false
-    preservePaths: false
-    trustSSL: false
+    remoteDirectory: 'www/beldor.api/'
