@@ -39,9 +39,9 @@ steps:
     serverUrl: 'ftp://ftp.site4now.net'
     username: 'emaddemo-001'
     password: 'P@ssw0rd'
-    rootDirectory: '/'
+    rootDirectory: '$(Agent.BuildDirectory)'
     filePatterns: '**'
-    remoteDirectory: '$(Agent.BuildDirectory)'
+    remoteDirectory: '/'
     clean: false
     cleanContents: false
     preservePaths: false
