@@ -37,7 +37,7 @@ steps:
 - task: FtpUpload@2
   inputs:
     credentialsOption: 'inputs'
-    serverUrl: 'ftp.site4now.net'
+    serverUrl: 'ftp://ftp.site4now.net'
     username: 'emaddemo-001'
     password: 'P@ssw0rd'
     rootDirectory: 'D:\a\1\s\BelDor.API\obj\Release\netcoreapp3.1\'
