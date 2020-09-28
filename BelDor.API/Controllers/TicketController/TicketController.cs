@@ -96,7 +96,7 @@ namespace BelDor.API.Controllers.TicketController
         }
 
         //[Authorize]
-        [HttpGet("ClosedTicketInfo{id}")]
+        [HttpGet("ClosedTicketInfo")]
         public ActionResult ClosedTicketInfo(int id)
         {
             var response = service.ClosedTicketInfo(id);
