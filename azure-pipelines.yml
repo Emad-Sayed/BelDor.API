@@ -40,7 +40,7 @@ steps:
     serverUrl: 'ftp://ftp.site4now.net'
     username: 'emaddemo-001'
     password: 'P@ssw0rd'
-    rootDirectory: '$(System.DefaultWorkingDirectory)\BelDor.API\obj\Release\netcoreapp3.1\'
+    rootDirectory: ''
     filePatterns: '**'
     remoteDirectory: 'www/beldor.api/'
     clean: false
