@@ -57,7 +57,7 @@ namespace BelDor.API.Controllers.AuthController
         private async Task<(string, IList<string>)> GenerateToken(AppUser Authuser, int timeExpiration)
         {
             var rolesFormRepo = await _userManager.GetRolesAsync(Authuser);
-            int BranchDepartementId = service.IfEmpployeeGetBranchDepartement(Authuser.Id);
+            var (BranchId,BranchDepartementId) = service.IfClerkGetMetaData(Authuser.Id);
             //Header==================
             var SecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["JWT:secretkey"]));
             var credential = new SigningCredentials(SecurityKey, SecurityAlgorithms.HmacSha256);
@@ -66,6 +66,7 @@ namespace BelDor.API.Controllers.AuthController
             {
                 new Claim("Id",Authuser.Id+""),
                 new Claim("Name",Authuser.UserName+""),
+                new Claim("BranchId",BranchId+""),
                 new Claim("BranchDepartementId",BranchDepartementId+""),
                 new Claim(JwtRegisteredClaimNames.Email,Authuser.Email),
                 new Claim(JwtRegisteredClaimNames.Jti,Guid.NewGuid().ToString())

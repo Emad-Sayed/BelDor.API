@@ -17,6 +17,7 @@ namespace Domain.Context
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
         public DbSet<AppUserEmployee> Employees { get; set; }
+        public DbSet<AppUserManager> Managers { get; set; }
         public DbSet<Branch> Branches { get; set; }
         public DbSet<Departement> Departements { get; set; }
         public DbSet<BranchDepartement> BranchDepartement { get; set; }

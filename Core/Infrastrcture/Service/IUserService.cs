@@ -9,7 +9,8 @@ namespace Core.Infrastrcture.Service
 {
     public interface IUserService
     {
-        int IfEmpployeeGetBranchDepartement(int EmployeeId);
+        (int,int) IfClerkGetMetaData(int ClerkId);
         Task<IResponse> CreateVisitor(RegisterationModel visitor);
+        Task<IResponse> CreateManagerOrEmployee(AddManagerOrEmployee clerk);
     }
 }

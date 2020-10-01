@@ -12,6 +12,7 @@ namespace Core.Domain.Repository
     public interface IAppDbContext
     {
         public DbSet<AppUserEmployee> Employees { get; set; }
+        public DbSet<AppUserManager> Managers { get; set; }
 
         public DbSet<Branch> Branches { get; set; }
         public DbSet<Departement> Departements { get; set; }
