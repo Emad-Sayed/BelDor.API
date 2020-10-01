@@ -3,6 +3,7 @@ using Core.Domain.UOW;
 using Core.Domain.ViewModel;
 using Core.Domain.ViewModel.Access;
 using Core.Infrastrcture.Service;
+using FluentValidation;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
@@ -68,9 +69,13 @@ namespace Infrastructure.Service.User
             {
                 await userManager.AddToRoleAsync(newAppUser, clerk.RoleName);
                 if (clerk.RoleName == "MANAGER")
-                    UOW.Managers.Add(new AppUserManager() { UserId = newAppUser.Id, BranchId = clerk.ManagerBranchId });
+                    UOW.Managers.Add(new AppUserManager() { UserId = newAppUser.Id, BranchId = clerk.BranchId });
                 else
-                    UOW.Employees.Add(new AppUserEmployee() { UserId = newAppUser.Id, BranchDepartementId = clerk.EmployeeBranchDepartementId });
+                {
+                    var selectedBranchDepartement = UOW.BranchDepartement.SingleOrDefault(bd => bd.BranchId == clerk.BranchId && bd.DepartementId == clerk.DepartementId);
+                    if (selectedBranchDepartement != null)
+                        UOW.Employees.Add(new AppUserEmployee() { UserId = newAppUser.Id, BranchDepartementId = selectedBranchDepartement.Id });
+                }
                 UOW.Compelete();
             }
             else
