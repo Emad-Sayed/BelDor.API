@@ -11,7 +11,7 @@ namespace Core.Domain.ViewModel.Access
         public string Password { get; set; }
         public string Phone { get; set; }
         public string RoleName { get; set; }
-        public int ManagerBranchId { get; set; }
-        public int EmployeeBranchDepartementId { get; set; }
+        public int BranchId { get; set; }
+        public int DepartementId { get; set; }
     }
 }
