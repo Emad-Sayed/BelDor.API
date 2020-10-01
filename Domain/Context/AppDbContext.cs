@@ -28,6 +28,7 @@ namespace Domain.Context
         public DbSet<TicketClosed> TicketClosed { get; set; }
 
         public DbSet<Configuration> Configurations { get; set; }
+        public DbSet<BranchConfiguration> BranchConfigurations { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

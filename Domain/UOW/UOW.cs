@@ -30,6 +30,7 @@ namespace Domain
             TicketClosed = new Repository<TicketClosed>(_context);
 
             Configurations = new Repository<Configuration>(_context);
+            BranchConfigurations = new Repository<BranchConfiguration>(_context);
 
         }
         public IRepository<AppUserEmployee> Employees { get; }
@@ -43,6 +44,7 @@ namespace Domain
         public IRepository<TicketClosed> TicketClosed { get; }
 
         public IRepository<Configuration> Configurations { get; }
+        public IRepository<BranchConfiguration> BranchConfigurations { get; }
 
 
         public int Compelete()

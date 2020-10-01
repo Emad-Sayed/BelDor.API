@@ -23,6 +23,7 @@ namespace Core.Domain.UOW
         IRepository<TicketClosed> TicketClosed { get; }
 
         IRepository<Configuration> Configurations { get; }
+        IRepository<BranchConfiguration> BranchConfigurations { get; }
 
         int Compelete();
     }

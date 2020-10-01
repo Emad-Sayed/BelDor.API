@@ -47,10 +47,9 @@ namespace Infrastructure.Service.TicketBusinees
             var selectedBranchDepartement = UOW.BranchDepartement.SingleOrDefault(bd => bd.BranchId == ticketRequest.BranchId
             && bd.DepartementId == ticketRequest.DepartementId);
 
-            var Config = UOW.Configurations.FirstOrDefault(c => true);
+            var (StartReservationTime, EndReservationTime) = GetBranchTime(ticketRequest.BranchId);
 
-
-            if (Config.StartReservationTime > TimeOfNow || Config.EndReservationTime < TimeOfNow)
+            if (StartReservationTime > TimeOfNow || EndReservationTime < TimeOfNow)
             {
                 response.status = false;
                 response.error_AR = "لا يمكن الحجز في هذا الموعد";
@@ -129,8 +128,9 @@ namespace Infrastructure.Service.TicketBusinees
             var ServerDateTime = DateTime.Now.AddServerTimeHours();
             var TimeOfNow = ServerDateTime.TimeOfDay;
             var DateOfNow = ServerDateTime.Date;
-            var Config = UOW.Configurations.FirstOrDefault(c => true);
-            if (Config.StartReservationTime > TimeOfNow || Config.EndReservationTime < TimeOfNow)
+            var selectedBranch = UOW.BranchDepartement.SingleOrDefault(d => d.Id == model.BranchDepartementId);
+            var (StartReservationTime, EndReservationTime) = GetBranchTime(selectedBranch.Id);
+            if (StartReservationTime > TimeOfNow || EndReservationTime < TimeOfNow)
             {
                 response.status = false;
                 response.error_AR = "لا يمكن الخدمة في هذا الموعد";
@@ -223,8 +223,9 @@ namespace Infrastructure.Service.TicketBusinees
             var ServerDateTime = DateTime.Now.AddServerTimeHours();
             var TimeOfNow = ServerDateTime.TimeOfDay;
             var DateOfNow = ServerDateTime.Date;
-            var Config = UOW.Configurations.FirstOrDefault(c => true);
-            if (Config.StartReservationTime > TimeOfNow || Config.EndReservationTime < TimeOfNow)
+            var selectedBranch = UOW.BranchDepartement.SingleOrDefault(d => d.Id == model.BranchDepartementId);
+            var (StartReservationTime, EndReservationTime) = GetBranchTime(selectedBranch.Id);
+            if (StartReservationTime > TimeOfNow || EndReservationTime < TimeOfNow)
             {
                 response.status = false;
                 response.error_AR = "لا يمكن الخدمة في هذا الموعد";
@@ -256,5 +257,16 @@ namespace Infrastructure.Service.TicketBusinees
         }
         #endregion
 
+        public (TimeSpan, TimeSpan) GetBranchTime(int BranchId)
+        {
+            var Config = UOW.Configurations.FirstOrDefault(c => true);
+            var ServerDateTime = DateTime.Now.AddServerTimeHours();
+            var selectedBranchConfiguraion = UOW.BranchConfigurations.SingleOrDefault(b => b.BranchId == BranchId && b.CreatedAt.Date == ServerDateTime.Date);
+            if (selectedBranchConfiguraion != null)
+            {
+                return (selectedBranchConfiguraion.StartTime, selectedBranchConfiguraion.EndTime);
+            }
+            return (Config.StartReservationTime, Config.EndReservationTime);
+        }
     }
 }
