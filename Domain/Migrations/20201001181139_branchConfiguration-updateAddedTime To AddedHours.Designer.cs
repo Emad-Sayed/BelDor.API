@@ -4,14 +4,16 @@ using Domain.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Domain.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201001181139_branchConfiguration-updateAddedTime To AddedHours")]
+    partial class branchConfigurationupdateAddedTimeToAddedHours
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -93,12 +95,12 @@ namespace Domain.Migrations
                         {
                             Id = 1,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "ab728b2f-7aea-4ae9-bd50-e44892f886dc",
+                            ConcurrencyStamp = "39c3b1d4-d4f0-4d90-81b2-b62fbac61585",
                             Email = "admin@admin.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "admin@admin.com",
-                            PasswordHash = "AQAAAAEAACcQAAAAEDVkvOpC2I5sfQgK1ZEdS+nssMlyYg11ZVABTdmp6PqtH9P07XAXAavLnk0umTY03g==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEMcxCMMMCouAns8ikp6aiLNwhmFyD5qz07zjHSFWWX9YogZSzxWZKa6vPcGGFp3b+w==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
@@ -108,12 +110,12 @@ namespace Domain.Migrations
                         {
                             Id = 2,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "ee3f2864-adba-4de8-b4f2-1a079833940f",
+                            ConcurrencyStamp = "3e11522c-f420-41cc-919f-9e572fc0e8a5",
                             Email = "employee@employee.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "employee@employee.com",
-                            PasswordHash = "AQAAAAEAACcQAAAAEM/U/VMWcOjz1G5LaHRNMjKaWjMt3tD5aQ1BzkbT+5zlm3Xo5guV5QabQ6bNujG20w==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEIbzXsU8BRG6xBjtB+elekRWxO52+X08huESRP29lJHkRQai4+43Fc227MH1MZtm9Q==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
@@ -123,12 +125,12 @@ namespace Domain.Migrations
                         {
                             Id = 3,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "cb883cc3-bcb3-4fd6-98ba-a4c0fda28186",
+                            ConcurrencyStamp = "777e03c4-07e4-4c3d-b703-3e7f7bde3300",
                             Email = "visitor@visitor.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "visitor@visitor.com",
-                            PasswordHash = "AQAAAAEAACcQAAAAEN/+UCIZBuKXN+rIlEhlfwqCTxGIa5yMTAcECKTrR3YIp16OEi3rkgRPaiLYn1r+Tg==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEBZsgTtZpKXmx4DBFw4ZACGO/go1zYq2LJomp4wumZnkey1QslozaUSyDYNcHwzaRQ==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
@@ -175,7 +177,7 @@ namespace Domain.Migrations
                         {
                             Id = 1,
                             BranchDepartementId = 1,
-                            CreatedAt = new DateTime(2020, 10, 1, 20, 54, 42, 690, DateTimeKind.Local).AddTicks(4736),
+                            CreatedAt = new DateTime(2020, 10, 1, 20, 11, 38, 284, DateTimeKind.Local).AddTicks(9308),
                             UserId = 2
                         });
                 });
@@ -187,6 +189,9 @@ namespace Domain.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int>("AddedHours")
+                        .HasColumnType("int");
+
                     b.Property<int>("BranchId")
                         .HasColumnType("int");
 
@@ -195,12 +200,6 @@ namespace Domain.Migrations
 
                     b.Property<int?>("CreatedById")
                         .HasColumnType("int");
-
-                    b.Property<TimeSpan>("EndTime")
-                        .HasColumnType("time");
-
-                    b.Property<TimeSpan>("StartTime")
-                        .HasColumnType("time");
 
                     b.Property<int?>("UpdatedById")
                         .HasColumnType("int");
@@ -250,7 +249,7 @@ namespace Domain.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2020, 10, 1, 20, 54, 42, 691, DateTimeKind.Local).AddTicks(120),
+                            CreatedAt = new DateTime(2020, 10, 1, 20, 11, 38, 285, DateTimeKind.Local).AddTicks(6357),
                             EndReservationTime = new TimeSpan(0, 18, 30, 0, 0),
                             StartReservationTime = new TimeSpan(0, 7, 30, 0, 0)
                         });
@@ -301,7 +300,7 @@ namespace Domain.Migrations
                             Id = 1,
                             AddressAR = "القاهرة",
                             AddressEN = "Cairo",
-                            CreatedAt = new DateTime(2020, 10, 1, 20, 54, 42, 687, DateTimeKind.Local).AddTicks(5522),
+                            CreatedAt = new DateTime(2020, 10, 1, 20, 11, 38, 282, DateTimeKind.Local).AddTicks(2108),
                             NameAR = "القاهرة",
                             NameEN = "Cairo",
                             Phone = "010"
@@ -311,7 +310,7 @@ namespace Domain.Migrations
                             Id = 2,
                             AddressAR = "الاسكندرية",
                             AddressEN = "Alexandria",
-                            CreatedAt = new DateTime(2020, 10, 1, 20, 54, 42, 689, DateTimeKind.Local).AddTicks(7080),
+                            CreatedAt = new DateTime(2020, 10, 1, 20, 11, 38, 284, DateTimeKind.Local).AddTicks(918),
                             NameAR = "الاسكندرية",
                             NameEN = "Alexandria",
                             Phone = "011"
@@ -357,35 +356,35 @@ namespace Domain.Migrations
                         {
                             Id = 1,
                             BranchId = 1,
-                            CreatedAt = new DateTime(2020, 10, 1, 20, 54, 42, 690, DateTimeKind.Local).AddTicks(1944),
+                            CreatedAt = new DateTime(2020, 10, 1, 20, 11, 38, 284, DateTimeKind.Local).AddTicks(5683),
                             DepartementId = 1
                         },
                         new
                         {
                             Id = 2,
                             BranchId = 1,
-                            CreatedAt = new DateTime(2020, 10, 1, 20, 54, 42, 690, DateTimeKind.Local).AddTicks(3333),
+                            CreatedAt = new DateTime(2020, 10, 1, 20, 11, 38, 284, DateTimeKind.Local).AddTicks(7566),
                             DepartementId = 2
                         },
                         new
                         {
                             Id = 3,
                             BranchId = 1,
-                            CreatedAt = new DateTime(2020, 10, 1, 20, 54, 42, 690, DateTimeKind.Local).AddTicks(3370),
+                            CreatedAt = new DateTime(2020, 10, 1, 20, 11, 38, 284, DateTimeKind.Local).AddTicks(7619),
                             DepartementId = 3
                         },
                         new
                         {
                             Id = 4,
                             BranchId = 2,
-                            CreatedAt = new DateTime(2020, 10, 1, 20, 54, 42, 690, DateTimeKind.Local).AddTicks(3374),
+                            CreatedAt = new DateTime(2020, 10, 1, 20, 11, 38, 284, DateTimeKind.Local).AddTicks(7624),
                             DepartementId = 2
                         },
                         new
                         {
                             Id = 5,
                             BranchId = 2,
-                            CreatedAt = new DateTime(2020, 10, 1, 20, 54, 42, 690, DateTimeKind.Local).AddTicks(3377),
+                            CreatedAt = new DateTime(2020, 10, 1, 20, 11, 38, 284, DateTimeKind.Local).AddTicks(7628),
                             DepartementId = 3
                         });
                 });
@@ -424,21 +423,21 @@ namespace Domain.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2020, 10, 1, 20, 54, 42, 689, DateTimeKind.Local).AddTicks(9142),
+                            CreatedAt = new DateTime(2020, 10, 1, 20, 11, 38, 284, DateTimeKind.Local).AddTicks(2462),
                             NameAR = "نظم المعلومات",
                             NameEN = "IT"
                         },
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2020, 10, 1, 20, 54, 42, 690, DateTimeKind.Local).AddTicks(568),
+                            CreatedAt = new DateTime(2020, 10, 1, 20, 11, 38, 284, DateTimeKind.Local).AddTicks(4391),
                             NameAR = "الدعم الفني",
                             NameEN = "Customer Service"
                         },
                         new
                         {
                             Id = 3,
-                            CreatedAt = new DateTime(2020, 10, 1, 20, 54, 42, 690, DateTimeKind.Local).AddTicks(624),
+                            CreatedAt = new DateTime(2020, 10, 1, 20, 11, 38, 284, DateTimeKind.Local).AddTicks(4447),
                             NameAR = "الشكاوي",
                             NameEN = "Complains"
                         });
@@ -549,28 +548,28 @@ namespace Domain.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2020, 10, 1, 20, 54, 42, 690, DateTimeKind.Local).AddTicks(7531),
+                            CreatedAt = new DateTime(2020, 10, 1, 20, 11, 38, 285, DateTimeKind.Local).AddTicks(2834),
                             NameAR = "انتظار",
                             NameEN = "Waiting"
                         },
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2020, 10, 1, 20, 54, 42, 690, DateTimeKind.Local).AddTicks(8940),
+                            CreatedAt = new DateTime(2020, 10, 1, 20, 11, 38, 285, DateTimeKind.Local).AddTicks(4756),
                             NameAR = "تخدم",
                             NameEN = "Serving"
                         },
                         new
                         {
                             Id = 3,
-                            CreatedAt = new DateTime(2020, 10, 1, 20, 54, 42, 690, DateTimeKind.Local).AddTicks(8977),
+                            CreatedAt = new DateTime(2020, 10, 1, 20, 11, 38, 285, DateTimeKind.Local).AddTicks(4807),
                             NameAR = "مغلقة",
                             NameEN = "Closed"
                         },
                         new
                         {
                             Id = 4,
-                            CreatedAt = new DateTime(2020, 10, 1, 20, 54, 42, 690, DateTimeKind.Local).AddTicks(8980),
+                            CreatedAt = new DateTime(2020, 10, 1, 20, 11, 38, 285, DateTimeKind.Local).AddTicks(4813),
                             NameAR = "تخلفت",
                             NameEN = "Missed"
                         });
@@ -608,21 +607,21 @@ namespace Domain.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "8eb384ad-a685-486f-bcdc-a92cfd5d1b3b",
+                            ConcurrencyStamp = "cd52a3be-d2eb-4119-9547-1c4081eb43e3",
                             Name = "ADMIN",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "2e6b208e-fb70-4935-a09e-409fdd9ebdfd",
+                            ConcurrencyStamp = "a0689568-00ac-4937-915a-df3e7e3e6e2a",
                             Name = "EMPLOYEE",
                             NormalizedName = "EMPLOYEE"
                         },
                         new
                         {
                             Id = 3,
-                            ConcurrencyStamp = "7e829f34-f75f-4b51-aad2-b3d04d3e4ac7",
+                            ConcurrencyStamp = "efcb0de6-b9c6-4cd9-9713-58ba3d61ca80",
                             Name = "VISITOR",
                             NormalizedName = "VISITOR"
                         });
