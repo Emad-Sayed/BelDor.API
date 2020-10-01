@@ -26,5 +26,13 @@ namespace BelDor.API.Controllers.AuthController
                 return Ok(response);
             return BadRequest(response);
         }
+        [HttpPost("CreateManagerOrEmployee")]
+        public async Task<ActionResult> CreateManagerOrEmployee(AddManagerOrEmployee clerk)
+        {
+            var response = await service.CreateManagerOrEmployee(clerk);
+            if (response.status == true)
+                return Ok(response);
+            return BadRequest(response);
+        }
     }
 }

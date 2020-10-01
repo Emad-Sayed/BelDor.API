@@ -27,6 +27,10 @@ namespace Domain.Context
              new IdentityRole<int>
              {
                  Id = 3,Name = "VISITOR",NormalizedName = "VISITOR",
+             },
+             new IdentityRole<int>
+             {
+                 Id = 4,Name = "MANAGER",NormalizedName = "MANAGER",
              });
             var hasher = new PasswordHasher<AppUser>();
             builder.Entity<AppUser>().HasData(
@@ -59,6 +63,16 @@ namespace Domain.Context
                 EmailConfirmed = true,
                 PasswordHash = hasher.HashPassword(null, "visitordemo"),
                 SecurityStamp = string.Empty
+            },
+            new AppUser
+            {
+                Id = 4,
+                UserName = "MANAGER",
+                Email = "manager@manager.com",
+                NormalizedEmail = "manager@manager.com",
+                EmailConfirmed = true,
+                PasswordHash = hasher.HashPassword(null, "managerdemo"),
+                SecurityStamp = string.Empty
             });
             builder.Entity<IdentityUserRole<int>>().HasData(
             new IdentityUserRole<int>
@@ -72,6 +86,10 @@ namespace Domain.Context
             new IdentityUserRole<int>
             {
                 RoleId = 3,UserId = 3
+            },
+            new IdentityUserRole<int>
+            {
+                RoleId = 4,UserId = 4
             });
             #endregion
             #region Location
@@ -120,8 +138,16 @@ namespace Domain.Context
             new AppUserEmployee
             {
                 Id = 1,
-                BranchDepartementId=1,
-                UserId=2
+                BranchDepartementId = 1,
+                UserId = 2
+            });
+
+            builder.Entity<AppUserManager>().HasData(
+            new AppUserManager        
+            {
+                Id = 2,
+                BranchId = 3,
+                UserId = 4
             });
             #endregion
             #region Ticket

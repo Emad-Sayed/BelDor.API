@@ -12,7 +12,8 @@ namespace Core.Domain.UOW
 
     public interface IUOW
     {
-        IRepository<AppUserEmployee> Employees { get;  }
+        IRepository<AppUserEmployee> Employees { get; }
+        IRepository<AppUserManager> Managers { get; }
 
         IBranchRepository Branches { get; }
         IDepartementRepository Departements { get; }

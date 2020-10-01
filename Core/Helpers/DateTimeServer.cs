@@ -8,7 +8,8 @@ namespace Core.Helpers
     {
         public static DateTime AddServerTimeHours(this DateTime date)
         {
-            return date.AddHours(0); // GMT From Egyption Time
+            //return date.AddHours(0);
+            return date.AddHours(9);
         }
     }
 }

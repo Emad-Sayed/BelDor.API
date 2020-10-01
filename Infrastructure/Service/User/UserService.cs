@@ -24,10 +24,15 @@ namespace Infrastructure.Service.User
             response = response_;
         }
 
-        public int IfEmpployeeGetBranchDepartement(int EmployeeId)
+        public (int, int) IfClerkGetMetaData(int ClerkId)
         {
-            var query = UOW.Employees.SingleOrDefault(e => e.UserId == EmployeeId);
-            return query != null ? query.BranchDepartementId : -1;
+            var queryEmployee = UOW.Employees.SingleOrDefault(e => e.UserId == ClerkId);
+            if (queryEmployee != null)
+                return (0, queryEmployee.BranchDepartementId);
+            var queryManager = UOW.Managers.SingleOrDefault(e => e.UserId == ClerkId);
+            if (queryManager != null)
+                return (queryManager.BranchId, 0);
+            return (0, 0);
         }
 
         public async Task<IResponse> CreateVisitor(RegisterationModel visitor)
@@ -42,6 +47,31 @@ namespace Infrastructure.Service.User
             if (result.Succeeded)
             {
                 await userManager.AddToRoleAsync(newAppUser, "VISITOR");
+            }
+            else
+            {
+                response.error_EN = result.Errors.Select(e => e.Description).FirstOrDefault();
+                response.status = false;
+            }
+            return response;
+        }
+        public async Task<IResponse> CreateManagerOrEmployee(AddManagerOrEmployee clerk)
+        {
+            AppUser newAppUser = new AppUser
+            {
+                UserName = clerk.UserName,
+                Email = clerk.Email,
+                EmailConfirmed = true,
+            };
+            var result = await userManager.CreateAsync(newAppUser, clerk.Password);
+            if (result.Succeeded)
+            {
+                await userManager.AddToRoleAsync(newAppUser, clerk.RoleName);
+                if (clerk.RoleName == "MANAGER")
+                    UOW.Managers.Add(new AppUserManager() { UserId = newAppUser.Id, BranchId = clerk.ManagerBranchId });
+                else
+                    UOW.Employees.Add(new AppUserEmployee() { UserId = newAppUser.Id, BranchDepartementId = clerk.EmployeeBranchDepartementId });
+                UOW.Compelete();
             }
             else
             {
