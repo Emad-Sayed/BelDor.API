@@ -102,6 +102,22 @@ namespace Infrastructure.Service.TicketBusinees
             response.data = result;
             return response;
         }
+        public IResponse EmployeeCurrentServingTicket(int EmployeeId)
+        {
+            var DateOfNow = DateTime.Now.AddServerTimeHours().Date;
+            var (data, rows) = UOW.Tickets.TicketFilter(new TicketSearchModel
+            {
+                employeesIds = new List<int> { EmployeeId },
+                statusIds = new List<int> { 2 },
+                SpecificDate = DateOfNow
+            });
+            if (data.ToList().Count == 0)
+                response.status = false;
+            else
+                response.data = data;
+            return response;
+        }
+
         public IResponse VisitorDailyTickets(TicketVisitorSearchModel search)
         {
             search.specificDay = search.specificDay ?? DateTime.Now.AddServerTimeHours().Date;
@@ -271,5 +287,6 @@ namespace Infrastructure.Service.TicketBusinees
             }
             return (Config.StartReservationTime, Config.EndReservationTime);
         }
+
     }
 }

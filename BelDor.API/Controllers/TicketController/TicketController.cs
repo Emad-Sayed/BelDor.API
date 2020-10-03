@@ -46,6 +46,15 @@ namespace BelDor.API.Controllers.TicketController
             return Ok(response);
         }
         [Authorize(Roles = "EMPLOYEE")]
+        [HttpGet("EmployeeCurrentServingTicket")]
+        public ActionResult EmployeeCurrentServingTicket()
+        {
+            var response = service.EmployeeCurrentServingTicket(User.GetUserId());
+            if (!response.status)
+                return NotFound(response);
+            return Ok(response);
+        }
+        [Authorize(Roles = "EMPLOYEE")]
         [HttpPost("ServeTicket")]
         public ActionResult ServeTicket()
         {

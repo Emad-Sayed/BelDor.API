@@ -11,6 +11,7 @@ namespace Core.Infrastrcture.Service
         IResponse TicketRequest(TicketRequestModel ticketRequest, int VisitorId);
         IResponse GetTicket(TicketSearchModel search);
         IResponse EmployeeDailyTickets(TicketEmployeeSearchModel search);
+        IResponse EmployeeCurrentServingTicket(int EmployeeId);
         IResponse VisitorDailyTickets(TicketVisitorSearchModel search);
         IResponse ServeTicket(TicketServingModel model);
         IResponse CloseServedTicket(TicketClosedModel model);
