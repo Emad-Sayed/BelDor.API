@@ -22,7 +22,9 @@ namespace Domain.Repository
             var DateOfNow = DateTime.Now.AddServerTimeHours().Date;
             var query = Context.Tickets.Where(t => t.CreatedAt.Date == DateOfNow &&
             t.BranchDepartementId == search.branchDepartementId &&
-            (search.statusIds.Count == 0 || search.statusIds.Contains(t.StatusId)))
+            (search.statusIds.Count == 0 || search.statusIds.Contains(t.StatusId))&&
+            (search.ticketIds.Count == 0 || search.ticketIds.Contains(t.Id))&&
+            (search.ticketNumbers.Count == 0 || search.ticketNumbers.Contains(t.TicketNumber)))
             .Select(t => new TicketViewModel
             {
                 Id = t.Id,
