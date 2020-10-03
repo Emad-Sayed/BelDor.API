@@ -83,8 +83,8 @@ namespace Infrastructure.Service.TicketBusinees
             UOW.Tickets.Add(newTicket);
             UOW.Compelete();
             #region notification
-            notification.NotifyNewEvent("E_" + newTicket.BranchDepartementId,
-                new { newTicket.Id, newTicket.TicketNumber, newTicket.CreatedById.Value });
+            notification.NotifyNewEvent("E_NewTicket" + newTicket.BranchDepartementId,
+                new {newTicket.Id, newTicket.TicketNumber, newTicket.CreatedById.Value });
             #endregion
             //Notification Employees
             response.data = VisitorDailyTickets(new TicketVisitorSearchModel()
@@ -160,8 +160,11 @@ namespace Infrastructure.Service.TicketBusinees
             currentTicket.UpdatedById = model.EmployeeId;
             UOW.Compelete();
             #region notification
-            notification.NotifyNewEvent("V_" + currentTicket.BranchDepartementId,
-                new { currentTicket.Id, currentTicket.BranchDepartementId, currentTicket.TicketNumber, currentTicket.CreatedById.Value });
+            foreach(var group in new List<string>(){ "V_" + currentTicket.BranchDepartementId ,"E_NewServe"+ currentTicket.BranchDepartementId })
+            {
+                notification.NotifyNewEvent(group,
+                new {currentTicket.Id, currentTicket.BranchDepartementId, currentTicket.TicketNumber, currentTicket.CreatedById.Value });
+            }
             #endregion
             response.data = currentTicket;
             return response;

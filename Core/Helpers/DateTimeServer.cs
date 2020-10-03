@@ -8,8 +8,8 @@ namespace Core.Helpers
     {
         public static DateTime AddServerTimeHours(this DateTime date)
         {
-            //return date.AddHours(0);
-            return date.AddHours(9);
+            return date.AddHours(0);
+            //return date.AddHours(9);
         }
     }
 }
