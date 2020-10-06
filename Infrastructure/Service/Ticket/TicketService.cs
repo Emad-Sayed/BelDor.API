@@ -179,7 +179,7 @@ namespace Infrastructure.Service.TicketBusinees
             foreach(var group in new List<string>(){ "V_" + currentTicket.BranchDepartementId ,"E_NewServe"+ currentTicket.BranchDepartementId })
             {
                 notification.NotifyNewEvent(group,
-                new {currentTicket.Id, currentTicket.BranchDepartementId, currentTicket.TicketNumber, currentTicket.CreatedById.Value });
+                new {currentTicket.Id, currentTicket.BranchDepartementId, currentTicket.TicketNumber, currentTicket.CreatedById.Value,currentTicket.UpdatedById });
             }
             #endregion
             response.data = currentTicket;
