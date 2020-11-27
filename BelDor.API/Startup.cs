@@ -33,9 +33,9 @@ namespace BelDor.API
         {
             services.InjectAllDependecies(Configuration);
             services.AddControllers(config=> {
-                config.Filters.Add<ValidationFilter>();
+                config.Filters.Add<ValidationFilter>(); // filter configured Globally for all actions
             }).AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<MappingProfile>());
-            services.Configure<ApiBehaviorOptions>(opt =>
+            services.Configure<ApiBehaviorOptions>(opt => // prevent fluent validation filter to work
             {
                 opt.SuppressModelStateInvalidFilter = true;
             });
