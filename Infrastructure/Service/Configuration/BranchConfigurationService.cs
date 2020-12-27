@@ -4,6 +4,7 @@ using Core.Domain.ViewModel;
 using Core.Domain.ViewModel.Configuration;
 using Core.Helpers;
 using Core.Infrastrcture.Service;
+using Hangfire;
 using Microsoft.EntityFrameworkCore.ValueGeneration.Internal;
 using System;
 using System.Collections.Generic;
@@ -20,6 +21,32 @@ namespace Infrastructure.Service.Configuration
             UOW = uow_;
             response = response_;
         }
+        public IResponse SetDefaultTime(BranchWorkingTimeModel model)
+        {
+            int startHour = TimeSpan.Parse(model.Start).Hours; // +2 To Convert UTC To Egypt
+            int endHour = TimeSpan.Parse(model.End).Hours;
+            RecurringJob.AddOrUpdate(() => OpenQueue(model), Cron.Daily(startHour));
+            RecurringJob.AddOrUpdate(() => CloseQueue(), Cron.Daily(endHour));
+            return response;
+        }
+        public void OpenQueue(BranchWorkingTimeModel model)
+        {
+            var newQueue = new ActiveQueue() { StartHour = TimeSpan.Parse(model.Start), EndHour = TimeSpan.Parse(model.End) };
+            UOW.ActiveQueues.Add(newQueue);
+            UOW.Compelete();
+        }
+        public void CloseQueue()
+        {
+            var selectedActiveQueue = UOW.ActiveQueues.SingleOrDefault(q => q.isActive);
+            if (selectedActiveQueue != null)
+            {
+                selectedActiveQueue.isActive = false;
+                UOW.Compelete();
+            }
+        }
+
+
+        #region not it's time
         public IResponse GetBackToDefaultTime(int BranchId)
         {
             var ServerDateTime = DateTime.Now.AddServerTimeHours();
@@ -61,5 +88,6 @@ namespace Infrastructure.Service.Configuration
             UOW.Compelete();
             return response;
         }
+        #endregion
     }
 }

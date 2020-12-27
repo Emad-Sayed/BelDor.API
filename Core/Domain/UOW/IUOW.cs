@@ -25,6 +25,7 @@ namespace Core.Domain.UOW
 
         IRepository<Configuration> Configurations { get; }
         IRepository<BranchConfiguration> BranchConfigurations { get; }
+        IRepository<ActiveQueue> ActiveQueues { get; }
 
         int Compelete();
     }

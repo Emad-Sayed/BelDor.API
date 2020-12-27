@@ -21,6 +21,12 @@ namespace BelDor.API.Controllers.BranchConfiguration
         {
             service = service_;
         }
+        [HttpPost("SetDefaultTime")]
+        public ActionResult SetDefaultTime([FromBody] BranchWorkingTimeModel model)
+        {
+            service.SetDefaultTime(model);
+            return Ok();
+        }
         [Authorize(Roles = "MANAGER")]
         [HttpPost("SetBranchTime")]
         public ActionResult SetBranchTime(BranchWorkingTimeModel config)

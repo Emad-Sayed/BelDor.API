@@ -25,6 +25,7 @@ namespace Core.Domain.Repository
         public DbSet<TicketClosed> TicketClosed { get; set; }
 
         public DbSet<Configuration> Configurations { get; set; }
+        public DbSet<ActiveQueue> ActiveQueues { get; set; }
         public DbSet<BranchConfiguration> BranchConfigurations { get; set; }
     }
 }

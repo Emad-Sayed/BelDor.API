@@ -32,6 +32,7 @@ namespace Domain
 
             Configurations = new Repository<Configuration>(_context);
             BranchConfigurations = new Repository<BranchConfiguration>(_context);
+            ActiveQueues = new Repository<ActiveQueue>(_context);
 
         }
         public IRepository<AppUserEmployee> Employees { get; }
@@ -47,6 +48,7 @@ namespace Domain
 
         public IRepository<Configuration> Configurations { get; }
         public IRepository<BranchConfiguration> BranchConfigurations { get; }
+        public IRepository<ActiveQueue> ActiveQueues { get; }
 
 
         public int Compelete()

@@ -39,17 +39,14 @@ namespace Infrastructure.Service.TicketBusinees
         }
         public IResponse TicketRequest(TicketRequestModel ticketRequest, int VisitorId)
         {
-
-            var ServerDateTime = DateTime.Now.AddServerTimeHours();
-            var TimeOfNow = ServerDateTime.TimeOfDay;
-            var DateOfNow = ServerDateTime.Date;
+            var activeQueue = UOW.ActiveQueues.SingleOrDefault(q => q.isActive);
 
             var selectedBranchDepartement = UOW.BranchDepartement.SingleOrDefault(bd => bd.BranchId == ticketRequest.BranchId
             && bd.DepartementId == ticketRequest.DepartementId);
 
-            var (StartReservationTime, EndReservationTime) = GetBranchTime(ticketRequest.BranchId);
+            //var (StartReservationTime, EndReservationTime) = GetBranchTime(ticketRequest.BranchId);
 
-            if (StartReservationTime > TimeOfNow || EndReservationTime < TimeOfNow)
+            if (activeQueue == null)
             {
                 response.status = false;
                 response.error_AR = "لا يمكن الحجز في هذا الموعد";
@@ -58,10 +55,9 @@ namespace Infrastructure.Service.TicketBusinees
                 return response;
             }
 
-
             //CHECK IF HAS TICKET BEFORE
             var SelectedTicket = UOW.Tickets.FirstOrDefault(t => t.BranchDepartementId == selectedBranchDepartement.Id
-            && t.CreatedById == VisitorId && t.StatusId != 3 && t.CreatedAt.Date == DateOfNow);
+            && t.CreatedById == VisitorId && t.StatusId != 3 && t.ActiveQueueId == activeQueue.Id);
             if (SelectedTicket != null)
             {
                 response.status = false;
@@ -73,18 +69,19 @@ namespace Infrastructure.Service.TicketBusinees
             }
 
             var CurrentNumber = UOW.Tickets.Find(t => t.BranchDepartementId == selectedBranchDepartement.Id
-                                    && t.CreatedAt.Date == DateOfNow)
+                                    && t.ActiveQueueId == activeQueue.Id)
                                     .Select(t => t.TicketNumber).DefaultIfEmpty(0).Max();
             var newTicket = new Ticket();
             newTicket.TicketNumber = CurrentNumber + 1;
             newTicket.CreatedById = VisitorId;
             newTicket.BranchDepartementId = selectedBranchDepartement.Id;
             newTicket.StatusId = 1;
+            newTicket.ActiveQueueId = activeQueue.Id;
             UOW.Tickets.Add(newTicket);
             UOW.Compelete();
             #region notification
             notification.NotifyNewEvent("E_NewTicket" + newTicket.BranchDepartementId,
-                new {newTicket.Id, newTicket.TicketNumber, newTicket.CreatedById.Value });
+                new { newTicket.Id, newTicket.TicketNumber, newTicket.CreatedById.Value });
             #endregion
             //Notification Employees
             response.data = VisitorDailyTickets(new TicketVisitorSearchModel()
@@ -93,35 +90,49 @@ namespace Infrastructure.Service.TicketBusinees
         }
         public IResponse EmployeeDailyTickets(TicketEmployeeSearchModel search)
         {
-            var (result, totalRows) = UOW.Tickets.EmployeeDailyTicket(search);
-            response.pagesTotalRows = totalRows;
-            float all_pages = (float)totalRows / search.pageSize;
-            response.pagesTotalNumber = (int)Math.Ceiling(all_pages);
-            response.pageSize = search.pageSize;
-            response.pageNumber = search.pageNumber;
-            response.data = result;
+            var activeQueue = UOW.ActiveQueues.SingleOrDefault(a => a.isActive);
+            if (activeQueue != null)
+            {
+                var (result, totalRows) = UOW.Tickets.EmployeeDailyTicket(search, activeQueue.Id);
+                response.pagesTotalRows = totalRows;
+                float all_pages = (float)totalRows / search.pageSize;
+                response.pagesTotalNumber = (int)Math.Ceiling(all_pages);
+                response.pageSize = search.pageSize;
+                response.pageNumber = search.pageNumber;
+                response.data = result;
+            }
             return response;
         }
         public IResponse EmployeeCurrentServingTicket(int EmployeeId)
         {
-            var DateOfNow = DateTime.Now.AddServerTimeHours().Date;
-            var (data, rows) = UOW.Tickets.TicketFilter(new TicketSearchModel
+            var activeQueue = UOW.ActiveQueues.SingleOrDefault(q => q.isActive);
+            if (activeQueue != null)
             {
-                employeesIds = new List<int> { EmployeeId },
-                statusIds = new List<int> { 2 },
-                SpecificDate = DateOfNow
-            });
-            if (data.ToList().Count == 0)
-                response.status = false;
-            else
-                response.data = data;
+                var (data, rows) = UOW.Tickets.TicketFilter(new TicketSearchModel
+                {
+                    employeesIds = new List<int> { EmployeeId },
+                    statusIds = new List<int> { 2 },
+                    activeQueueIds = new List<int> { activeQueue.Id },
+                });
+                if (data.ToList().Count > 0)
+                {
+                    response.data = data;
+                    return response;
+                }
+            }
+            response.status = false;
             return response;
+
         }
 
         public IResponse VisitorDailyTickets(TicketVisitorSearchModel search)
         {
-            search.specificDay = search.specificDay ?? DateTime.Now.AddServerTimeHours().Date;
-            var (result, totalRows) = UOW.Tickets.VisitorDailyTicket(search);
+            var queueId = -1;
+            if (search.specificDay == null)
+            {
+                queueId = UOW.ActiveQueues.SingleOrDefault(d => d.isActive)?.Id ?? -1;
+            }
+            var (result, totalRows) = UOW.Tickets.VisitorDailyTicket(search, queueId);
             var dataListed = result.ToList();
             foreach (var ticket in dataListed)
             {
@@ -141,12 +152,9 @@ namespace Infrastructure.Service.TicketBusinees
         {
             //as3'r ticket waiting
             //arbot el ticket deh bel visitor
-            var ServerDateTime = DateTime.Now.AddServerTimeHours();
-            var TimeOfNow = ServerDateTime.TimeOfDay;
-            var DateOfNow = ServerDateTime.Date;
+            var activeQueue = UOW.ActiveQueues.SingleOrDefault(a => a.isActive);
             var selectedBranch = UOW.BranchDepartement.SingleOrDefault(d => d.Id == model.BranchDepartementId);
-            var (StartReservationTime, EndReservationTime) = GetBranchTime(selectedBranch.Id);
-            if (StartReservationTime > TimeOfNow || EndReservationTime < TimeOfNow)
+            if (activeQueue == null)
             {
                 response.status = false;
                 response.error_AR = "لا يمكن الخدمة في هذا الموعد";
@@ -155,14 +163,14 @@ namespace Infrastructure.Service.TicketBusinees
                 return response;
             }
             var servingTicket = UOW.Tickets.SingleOrDefault(t => t.BranchDepartementId == model.BranchDepartementId
-            && t.CreatedAt.Date == DateOfNow && t.StatusId == 2 && t.UpdatedById == model.EmployeeId);
+            && t.ActiveQueueId == activeQueue.Id && t.StatusId == 2 && t.UpdatedById == model.EmployeeId);
             if (servingTicket != null)
             {
                 response.data = servingTicket;
                 return response;
             }
             var currentTicket = UOW.Tickets.Find(t => t.BranchDepartementId == model.BranchDepartementId
-                        && t.CreatedAt.Date == DateOfNow && t.StatusId == 1)
+                        && t.ActiveQueueId == activeQueue.Id && t.StatusId == 1)
                         .OrderBy(t => t.TicketNumber).FirstOrDefault();
             if (currentTicket == null)
             {
@@ -176,10 +184,10 @@ namespace Infrastructure.Service.TicketBusinees
             currentTicket.UpdatedById = model.EmployeeId;
             UOW.Compelete();
             #region notification
-            foreach(var group in new List<string>(){ "V_" + currentTicket.BranchDepartementId ,"E_NewServe"+ currentTicket.BranchDepartementId })
+            foreach (var group in new List<string>() { "V_" + currentTicket.BranchDepartementId, "E_NewServe" + currentTicket.BranchDepartementId })
             {
                 notification.NotifyNewEvent(group,
-                new {currentTicket.Id, currentTicket.BranchDepartementId, currentTicket.TicketNumber, currentTicket.CreatedById.Value,currentTicket.UpdatedById });
+                new { currentTicket.Id, currentTicket.BranchDepartementId, currentTicket.TicketNumber, currentTicket.CreatedById.Value, currentTicket.UpdatedById });
             }
             #endregion
             response.data = currentTicket;
@@ -188,10 +196,10 @@ namespace Infrastructure.Service.TicketBusinees
         #region Closed
         public IResponse CloseServedTicket(TicketClosedModel model)
         {
+            var activeQueue = UOW.ActiveQueues.SingleOrDefault(a => a.isActive);
             //smallest ticket m3molha serve mn el employee dh
-            var ServerDateTime = DateTime.Now.AddServerTimeHours().Date;
             var servingTicket = UOW.Tickets.SingleOrDefault(t => t.BranchDepartementId == model.BranchDepartementId
-                                && t.CreatedAt.Date == ServerDateTime && t.StatusId == 2 && t.UpdatedById == model.EmployeeId);
+                                && t.ActiveQueueId == activeQueue.Id && t.StatusId == 2 && t.UpdatedById == model.EmployeeId);
             if (servingTicket == null)
             {
                 response.status = false;
@@ -201,7 +209,12 @@ namespace Infrastructure.Service.TicketBusinees
                 return response;
             }
             servingTicket.StatusId = 3;
-            UOW.TicketClosed.Add(new TicketClosed { TicketId = servingTicket.Id, CreatedById = model.EmployeeId, Information = model.Information });
+            UOW.TicketClosed.Add(new TicketClosed
+            {
+                TicketId = servingTicket.Id,
+                CreatedById = model.EmployeeId,
+                Information = model.Information
+            });
             UOW.Compelete();
             response.data = servingTicket;
             return response;
@@ -221,9 +234,17 @@ namespace Infrastructure.Service.TicketBusinees
         public IResponse SetTicketAsMissed(TicketClosedModel model)
         {
             //smallest ticket m3molha serve mn el employee dh
-            var ServerDateTime = DateTime.Now.AddServerTimeHours().Date;
+            var activeQueue = UOW.ActiveQueues.SingleOrDefault(a => a.isActive);
+            if (activeQueue == null)
+            {
+                response.status = false;
+                response.error_AR = "لا يمكن الخدمة في هذا الموعد";
+                response.error_EN = "Time not available for Reservation";
+                response.data = null;
+                return response;
+            }
             var servingTicket = UOW.Tickets.SingleOrDefault(t => t.BranchDepartementId == model.BranchDepartementId
-                                && t.CreatedAt.Date == ServerDateTime && t.StatusId == 2 && t.UpdatedById == model.EmployeeId);
+                                && t.ActiveQueueId == activeQueue.Id && t.StatusId == 2 && t.UpdatedById == model.EmployeeId);
             if (servingTicket == null)
             {
                 response.status = false;
@@ -239,12 +260,8 @@ namespace Infrastructure.Service.TicketBusinees
         }
         public IResponse ServeMissedTicket(TicketServeMissedModel model)
         {
-            var ServerDateTime = DateTime.Now.AddServerTimeHours();
-            var TimeOfNow = ServerDateTime.TimeOfDay;
-            var DateOfNow = ServerDateTime.Date;
-            var selectedBranch = UOW.BranchDepartement.SingleOrDefault(d => d.Id == model.BranchDepartementId);
-            var (StartReservationTime, EndReservationTime) = GetBranchTime(selectedBranch.Id);
-            if (StartReservationTime > TimeOfNow || EndReservationTime < TimeOfNow)
+            var activeQueue = UOW.ActiveQueues.SingleOrDefault(a => a.isActive);
+            if (activeQueue == null)
             {
                 response.status = false;
                 response.error_AR = "لا يمكن الخدمة في هذا الموعد";
@@ -253,14 +270,14 @@ namespace Infrastructure.Service.TicketBusinees
                 return response;
             }
             var servingTicket = UOW.Tickets.SingleOrDefault(t => t.BranchDepartementId == model.BranchDepartementId
-            && t.CreatedAt.Date == DateOfNow && t.StatusId == 2 && t.UpdatedById == model.EmployeeId);
+            && t.ActiveQueueId == activeQueue.Id && t.StatusId == 2 && t.UpdatedById == model.EmployeeId);
             if (servingTicket != null)
             {
                 response.data = servingTicket;
                 return response;
             }
             var misseddTicket = UOW.Tickets.SingleOrDefault(t => t.Id == model.TicketId && t.BranchDepartementId == model.BranchDepartementId
-            && t.CreatedAt.Date == DateOfNow && t.StatusId == 4);
+            && t.ActiveQueueId == activeQueue.Id && t.StatusId == 4);
             if (misseddTicket == null)
             {
                 response.status = false;
@@ -275,18 +292,6 @@ namespace Infrastructure.Service.TicketBusinees
             return response;
         }
         #endregion
-
-        public (TimeSpan, TimeSpan) GetBranchTime(int BranchId)
-        {
-            var Config = UOW.Configurations.FirstOrDefault(c => true);
-            var ServerDateTime = DateTime.Now.AddServerTimeHours();
-            var selectedBranchConfiguraion = UOW.BranchConfigurations.SingleOrDefault(b => b.BranchId == BranchId && b.CreatedAt.Date == ServerDateTime.Date);
-            if (selectedBranchConfiguraion != null)
-            {
-                return (selectedBranchConfiguraion.StartTime, selectedBranchConfiguraion.EndTime);
-            }
-            return (Config.StartReservationTime, Config.EndReservationTime);
-        }
 
     }
 }

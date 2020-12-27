@@ -14,5 +14,7 @@ namespace Core.Domain.Entity.TicketEntites
         public TicketStatus Status { get; set; }
         public int BranchDepartementId { get; set; }
         public BranchDepartement BranchDepartement { get; set; }
+        public int ActiveQueueId { get; set; }
+        public ActiveQueue ActiveQueue { get; set; }
     }
 }

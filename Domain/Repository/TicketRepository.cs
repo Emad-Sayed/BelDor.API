@@ -17,10 +17,9 @@ namespace Domain.Repository
         {
         }
 
-        public (IEnumerable<TicketViewModel>, int) EmployeeDailyTicket(TicketEmployeeSearchModel search)
+        public (IEnumerable<TicketViewModel>, int) EmployeeDailyTicket(TicketEmployeeSearchModel search, int queueId)
         {
-            var DateOfNow = DateTime.Now.AddServerTimeHours().Date;
-            var query = Context.Tickets.Where(t => t.CreatedAt.Date == DateOfNow &&
+            var query = Context.Tickets.Where(t => t.ActiveQueueId == queueId &&
             t.BranchDepartementId == search.branchDepartementId &&
             (search.statusIds.Count == 0 || search.statusIds.Contains(t.StatusId)) &&
             (search.ticketIds.Count == 0 || search.ticketIds.Contains(t.Id)) &&
@@ -48,10 +47,12 @@ namespace Domain.Repository
             var data = query.OrderBy(c => c.TicketNumber).Skip((search.pageNumber - 1) * search.pageSize).Take(search.pageSize);
             return (data, count);
         }
-        public (IEnumerable<TicketViewModel>, int) VisitorDailyTicket(TicketVisitorSearchModel search)
+        public (IEnumerable<TicketViewModel>, int) VisitorDailyTicket(TicketVisitorSearchModel search, int queueId)
         {
-            var query = Context.Tickets.Where(t => t.CreatedAt.Date == search.specificDay.Value.Date &&
-            t.CreatedById == search.visitorId &&
+            var query = Context.Tickets.Where(t =>
+                       t.CreatedById == search.visitorId &&
+            (queueId == -1 || t.ActiveQueueId == queueId) &&
+            (search.specificDay == null || t.CreatedAt.Date==search.specificDay.Value.Date) &&
             (search.ticketIds.Count == 0 || search.ticketIds.Contains(t.Id)) &&
             (search.statusIds.Count == 0 || search.statusIds.Contains(t.StatusId)) &&
             (search.branchIds.Count == 0 || search.branchIds.Contains(t.BranchDepartement.BranchId)) &&
@@ -81,10 +82,11 @@ namespace Domain.Repository
 
         public (IEnumerable<TicketViewModel>, int) TicketFilter(TicketSearchModel search)
         {
-            var query = Context.Tickets.Where(t => 
+            var query = Context.Tickets.Where(t =>
             (search.ticketIds.Count == 0 || search.ticketIds.Contains(t.Id)) &&
             (search.employeesIds.Count == 0 || search.employeesIds.Contains(t.UpdatedById.Value)) &&
             (search.statusIds.Count == 0 || search.statusIds.Contains(t.StatusId)) &&
+            (search.activeQueueIds.Count == 0 || search.activeQueueIds.Contains(t.ActiveQueueId)) &&
             (search.SpecificDate == null || search.SpecificDate.Value.Date == t.CreatedAt.Date))
                 .Select(t => new TicketViewModel
                 {

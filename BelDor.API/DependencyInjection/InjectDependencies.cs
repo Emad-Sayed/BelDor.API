@@ -3,6 +3,8 @@ using Core.Domain.Entity.Access;
 using Core.Domain.Mapper;
 using Domain.Context;
 using Domain.DependencyInjection;
+using Hangfire;
+using Hangfire.SqlServer;
 using Infrastructure.DependencyInjection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -30,7 +32,25 @@ namespace BelDor.API.DependencyInjection
             services.IdentityInjection();
             services.AuthInjection(configuration);
             services.SignalRInjection();
+            services.HangFireInjection(configuration);
         }
+        public static void HangFireInjection(this IServiceCollection services, IConfiguration con)
+        {
+            services.AddHangfire(configuration => configuration
+                .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
+                .UseSimpleAssemblyNameTypeSerializer()
+                .UseRecommendedSerializerSettings()
+                .UseSqlServerStorage(con.GetConnectionString("DefaultConnection"), new SqlServerStorageOptions
+                {
+                    CommandBatchMaxTimeout = TimeSpan.FromMinutes(5),
+                    SlidingInvisibilityTimeout = TimeSpan.FromMinutes(5),
+                    QueuePollInterval = TimeSpan.Zero,
+                    UseRecommendedIsolationLevel = true,
+                    DisableGlobalLocks = true
+                }));
+            services.AddHangfireServer();
+        }
+
         public static void SwaggerInjection(this IServiceCollection services)
         {
             services.AddSwaggerGen(c =>

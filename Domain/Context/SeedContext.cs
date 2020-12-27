@@ -146,7 +146,7 @@ namespace Domain.Context
             new AppUserManager        
             {
                 Id = 2,
-                BranchId = 3,
+                BranchId = 2,
                 UserId = 4
             });
             #endregion

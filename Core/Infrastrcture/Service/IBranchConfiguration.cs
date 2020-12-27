@@ -8,6 +8,7 @@ namespace Core.Infrastrcture.Service
 {
     public interface IBranchConfiguration
     {
+        IResponse SetDefaultTime(BranchWorkingTimeModel model);
         IResponse SetBranchTime(BranchWorkingTimeModel workingTime, int ManagerId, int BranchId);
         IResponse GetBackToDefaultTime(int BranchId);
         IResponse GetBranchTime(int BranchId);

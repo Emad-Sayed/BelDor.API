@@ -422,7 +422,8 @@ namespace Domain.Migrations
                 {
                     { 1, new DateTime(2020, 9, 7, 1, 38, 48, 299, DateTimeKind.Local).AddTicks(5997), null, "انتظار", "WAITING" },
                     { 2, new DateTime(2020, 9, 7, 1, 38, 48, 299, DateTimeKind.Local).AddTicks(7646), null, "تخدم", "SERVING" },
-                    { 3, new DateTime(2020, 9, 7, 1, 38, 48, 299, DateTimeKind.Local).AddTicks(7678), null, "مغلقة", "Closed" }
+                    { 3, new DateTime(2020, 9, 7, 1, 38, 48, 299, DateTimeKind.Local).AddTicks(7678), null, "مغلقة", "Closed" },
+                    { 4, new DateTime(2020, 9, 7, 1, 38, 48, 299, DateTimeKind.Local).AddTicks(7678), null, "تخلف", "Missed" }
                 });
 
             migrationBuilder.InsertData(

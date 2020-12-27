@@ -16,6 +16,7 @@ using FluentValidation.AspNetCore;
 using Core.Domain.Mapper;
 using BelDor.API.Filters;
 using Infrastructure.Notification.SignalR.Hubs;
+using Hangfire;
 
 namespace BelDor.API
 {
@@ -53,6 +54,7 @@ namespace BelDor.API
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
             });
+            app.UseHangfireDashboard();
             app.UseCors("CorsPolicy");
             app.UseHttpsRedirection();
 
