@@ -23,10 +23,12 @@ namespace Infrastructure.Service.Configuration
         }
         public IResponse SetDefaultTime(BranchWorkingTimeModel model)
         {
-            int startHour = TimeSpan.Parse(model.Start).Hours; // +2 To Convert UTC To Egypt
-            int endHour = TimeSpan.Parse(model.End).Hours;
-            RecurringJob.AddOrUpdate(() => OpenQueue(model), Cron.Daily(startHour));
-            RecurringJob.AddOrUpdate(() => CloseQueue(), Cron.Daily(endHour));
+            var startTime = TimeSpan.Parse(model.Start);
+            var endTime = TimeSpan.Parse(model.End);
+            var start = new DateTime(2000, 10, 10, startTime.Hours, startTime.Minutes, 0).AddHours(-2); //To convert to UTC
+            var end = new DateTime(2000, 10, 10, endTime.Hours, endTime.Minutes, 0).AddHours(-2);//To convert to UTC
+            RecurringJob.AddOrUpdate(() => OpenQueue(model), Cron.Daily(start.TimeOfDay.Hours, start.TimeOfDay.Minutes));
+            RecurringJob.AddOrUpdate(() => CloseQueue(), Cron.Daily(end.TimeOfDay.Hours, end.TimeOfDay.Minutes));
             return response;
         }
         public void OpenQueue(BranchWorkingTimeModel model)

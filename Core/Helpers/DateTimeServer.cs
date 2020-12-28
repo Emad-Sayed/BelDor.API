@@ -6,10 +6,11 @@ namespace Core.Helpers
 {
     public static class DateTimeServer
     {
+        public static int Difference = 9;
         public static DateTime AddServerTimeHours(this DateTime date)
         {
             //return date.AddHours(0);
-            return date.AddHours(9);
+            return date.AddHours(Difference);
         }
     }
 }

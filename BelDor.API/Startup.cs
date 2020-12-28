@@ -33,7 +33,8 @@ namespace BelDor.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.InjectAllDependecies(Configuration);
-            services.AddControllers(config=> {
+            services.AddControllers(config =>
+            {
                 config.Filters.Add<ValidationFilter>(); // filter configured Globally for all actions
             }).AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<MappingProfile>());
             services.Configure<ApiBehaviorOptions>(opt => // prevent fluent validation filter to work
@@ -54,7 +55,11 @@ namespace BelDor.API
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
             });
-            app.UseHangfireDashboard();
+            app.UseHangfireDashboard("/hangfire", new DashboardOptions
+            {
+                Authorization = new[] { new HangfireAuthFilter() }
+            });
+            
             app.UseCors("CorsPolicy");
             app.UseHttpsRedirection();
 

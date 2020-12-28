@@ -11,9 +11,10 @@ namespace Core.Domain.Validation.Configuration
         public BranchConfigurationValidation()
         {
             RuleFor(x => x.End).Must((Model,End) => {
-                TimeSpan toStartTime = TimeSpan.Parse(Model.Start);
-                TimeSpan toEndTime = TimeSpan.Parse(End);
-                return toEndTime > toStartTime;
+                //TimeSpan toStartTime = TimeSpan.Parse(Model.Start);
+                //TimeSpan toEndTime = TimeSpan.Parse(End);
+                //return toEndTime > toStartTime;
+                return true;
             }).WithMessage("End Time must be larger than Start Time");
         }
     }
